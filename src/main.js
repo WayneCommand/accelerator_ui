@@ -1,10 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify';
+import request from "./plugins/requests";
+import vuex from './store/index'
 
-Vue.config.productionTip = false
+Vue.prototype.$get = request.get;
+Vue.prototype.$post = request.post;
+
+Vue.config.productionTip = false;
 
 new Vue({
   vuetify,
+  vuex,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
