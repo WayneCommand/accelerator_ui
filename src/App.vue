@@ -1,9 +1,16 @@
 <template>
-  <v-app>
-    <router-view name="navigation"></router-view>
-    <router-view name="header"></router-view>
-    <router-view></router-view>
-  </v-app>
+    <v-app>
+        <v-fade-transition>
+            <router-view name="navigation"></router-view>
+        </v-fade-transition>
+        <v-fade-transition>
+            <router-view name="header"></router-view>
+        </v-fade-transition>
+        <v-fade-transition>
+            <router-view></router-view>
+        </v-fade-transition>
+    </v-app>
+
 </template>
 
 <script>

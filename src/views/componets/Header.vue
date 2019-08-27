@@ -13,7 +13,17 @@
 
 <script>
     export default {
-        name: "Header"
+        name: "Header",
+        computed: {
+            drawer:{
+                get(){
+                    return this.$store.state.layout.menu;
+                },
+                set(value){
+                    this.$store.commit("setMenuDisplay", value);
+                }
+            }
+        }
     }
 </script>
 

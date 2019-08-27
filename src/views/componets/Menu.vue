@@ -3,6 +3,7 @@
             clipped
             app
             expand-on-hover
+            v-model="drawer"
     >
         <v-list
                 nav
@@ -32,7 +33,17 @@
 
 <script>
     export default {
-        name: "Menu"
+        name: "Menu",
+        computed:{
+            drawer:{
+                get(){
+                    return this.$store.state.layout.menu;
+                },
+                set(value){
+                    this.$store.commit("setMenuDisplay", value);
+                }
+            }
+        }
     }
 </script>
 
