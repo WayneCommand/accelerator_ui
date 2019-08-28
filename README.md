@@ -1,10 +1,13 @@
 # accelerator_ui (一方通行)
 > `一方通行`用户界面  
-> 配合user_service实现系统交互
+> 配合accelerator实现系统交互
 
 ## 技术栈
 - vue
 - vuetify theme
+- vuex
+- vue router
+- axios
 
 ## Project setup
 ```
