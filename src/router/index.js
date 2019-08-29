@@ -5,6 +5,7 @@ import Menu from "../views/componets/Menu";
 import Header from "../views/componets/Header";
 import LoginCard from "../views/login/LoginCard";
 import LoginHeader from "../views/login/LoginHeader";
+import Profile from "../views/profiles/Profile";
 
 
 Vue.use(VueRouter);
@@ -24,6 +25,15 @@ let constRouter = [
         components: {
             header: LoginHeader,
             default: LoginCard
+        }
+    },
+    {
+        path: '/profile',
+        name: '个人信息',
+        components: {
+            navigation: Menu,
+            header: Header,
+            default: Profile
         }
     },
 ];
