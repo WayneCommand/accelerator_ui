@@ -6,6 +6,9 @@ import Header from "../views/componets/Header";
 import LoginCard from "../views/login/LoginCard";
 import LoginHeader from "../views/login/LoginHeader";
 import Profile from "../views/profiles/Profile";
+import MyInfo from "../views/profiles/components/MyInfo";
+import Safety from "../views/profiles/components/Safety";
+import Main from "../views/profiles/components/Main";
 
 
 Vue.use(VueRouter);
@@ -34,7 +37,22 @@ let constRouter = [
             navigation: Menu,
             header: Header,
             default: Profile
-        }
+        },
+        children:[
+            {
+                path:'myinfo',
+                component:MyInfo
+            },
+            {
+                path: 'safety',
+                component: Safety
+            },
+            {
+                path:'main',
+                component: Main
+
+            }
+        ]
     },
 ];
 

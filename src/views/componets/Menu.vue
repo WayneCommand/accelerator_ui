@@ -9,19 +9,19 @@
                 nav
                 dense
         >
-            <v-list-item link>
+            <v-list-item link to="/profile/main">
                 <v-list-item-icon>
                     <v-icon>mdi-account-circle</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>首页</v-list-item-title>
             </v-list-item>
-            <v-list-item link>
+            <v-list-item link to="/profile/myinfo">
                 <v-list-item-icon>
                     <v-icon>mdi-account-card-details</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>个人信息</v-list-item-title>
             </v-list-item>
-            <v-list-item link>
+            <v-list-item link to="/profile/safety">
                 <v-list-item-icon>
                     <v-icon>mdi-shield-account</v-icon>
                 </v-list-item-icon>
@@ -43,6 +43,9 @@
                     this.$store.commit("setMenuDisplay", value);
                 }
             }
+        },
+        methods:{
+
         }
     }
 </script>
