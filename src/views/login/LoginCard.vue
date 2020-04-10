@@ -69,7 +69,7 @@
         name: "LoginCard",
         data: function () {
             return {
-                loginStep: 0,
+                loginStep: 1,
                 name: "",
                 password: "",
                 loadingFlag: false,
@@ -83,11 +83,7 @@
         methods: {
             goLogin: function () {
                 this.loadingFlag = true;
-                this.$post("http://localhost:9090/login/byPassword",{"username":this.name,"password":this.password})
-                    .then(resp => {
-                        console.log(resp);
-                        this.loadingFlag = false;
-                    })
+                this.loadingFlag = false;
 
             }
         }
