@@ -67,7 +67,6 @@
 <script>
     import api from '../../api/index'
     import {mapMutations} from 'vuex'
-    import request from '../../plugins/requests'
 
     export default {
         name: "LoginCard",
@@ -88,7 +87,7 @@
             goLogin: function () {
                 this.loadingFlag = true;
 
-                request.post('/login',{
+                api.login.loginByPassword({
                     username: this.name,
                     password:this.password
                 }).then(resp => {
@@ -98,18 +97,6 @@
                         this.$router.replace("/profile")
                     }
                 })
-
-
-                //TODO 待优化的登录逻辑
-                /*api.login.loginByPassword({
-                    username: this.name,
-                    password:this.password
-                }).then(function (resp) {
-                    if (resp.data.state === "success"){
-                        this.saveLogin(resp.headers['x-auth-token']);
-                    }
-
-                })*/
 
             },
             ...mapMutations({
