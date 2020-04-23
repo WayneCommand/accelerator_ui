@@ -9,6 +9,7 @@ import Profile from "../views/profiles/Profile";
 import MyInfo from "../views/profiles/components/MyInfo";
 import Safety from "../views/profiles/components/Safety";
 import Main from "../views/profiles/components/Main";
+import Msg from '../views/componets/Message';
 
 
 Vue.use(VueRouter);
@@ -54,6 +55,13 @@ let constRouter = [
             }
         ]
     },
+    {
+        path: '/msg',
+        name: 'test msg',
+        components: {
+            default: Msg
+        }
+    }
 ];
 
 let router = new VueRouter({

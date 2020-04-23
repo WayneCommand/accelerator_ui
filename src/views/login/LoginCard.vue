@@ -11,7 +11,6 @@
                                     text
                                     href="#"
                                     target="_blank"
-                                    v-on="on"
                             >
                                 注册
                             </v-btn>
@@ -37,19 +36,20 @@
                                         <v-text-field
                                                 v-model="password"
                                                 :append-icon="show1 ? 'visibility' : 'visibility_off'"
-                                                :rules="[rules.required, rules.min]"
                                                 :type="show1 ? 'text' : 'password'"
+                                                @click:append="show1 = !show1"
+                                                :rules="[rules.required, rules.min]"
                                                 name="password"
                                                 label="密码"
                                                 hint="至少6个字符"
                                                 counter
-                                                @click:append="show1 = !show1"
                                                 placeholder="密码"
                                                 outlined></v-text-field>
                                     </v-container>
                                     <v-btn
                                             color="primary"
                                             @click="goLogin"
+                                            :disabled="password.length === 0"
                                     >
                                         Login
                                     </v-btn>
@@ -65,6 +65,10 @@
 </template>
 
 <script>
+    import api from '../../api/index'
+    import {mapMutations} from 'vuex'
+    import request from '../../plugins/requests'
+
     export default {
         name: "LoginCard",
         data: function () {
@@ -83,10 +87,40 @@
         methods: {
             goLogin: function () {
                 this.loadingFlag = true;
-                this.loadingFlag = false;
 
+                request.post('/login',{
+                    username: this.name,
+                    password:this.password
+                }).then(resp => {
+                    if (resp.data.state === "success"){
+                        this.saveLogin(resp.headers['x-auth-token']);
+                        this.loadingFlag = false;
+                        this.$router.replace("/profile")
+                    }
+                })
+
+
+                //TODO 待优化的登录逻辑
+                /*api.login.loginByPassword({
+                    username: this.name,
+                    password:this.password
+                }).then(function (resp) {
+                    if (resp.data.state === "success"){
+                        this.saveLogin(resp.headers['x-auth-token']);
+                    }
+
+                })*/
+
+            },
+            ...mapMutations({
+                setToken:'account/setToken'
+            }),
+            saveLogin(token){
+                this.setToken(token);
             }
-        }
+
+        },
+
     }
 </script>
 
