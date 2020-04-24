@@ -80,7 +80,7 @@
                 rules: {
                     required: value => !!value || 'Required.',
                     min: v => v.length >= 6 || 'Min 6 characters',
-                },
+                }
             };
         },
         methods: {
@@ -95,7 +95,30 @@
                         this.saveLogin(resp.headers['x-auth-token']);
                         this.loadingFlag = false;
                         this.$router.replace("/profile")
+                    }else {
+                        this.$dialog.notify.warning('密码不对 请重试.', {
+                            position: 'top-right',
+                            timeout: 3000
+                        })
                     }
+                }).catch(() => {
+                    this.$dialog.confirm({
+                        text: '请重新再试一下, 不行的话就关掉.',
+                        title: '发生了错误',
+                        actions: {
+                            false: '取消',
+                            true: {
+                                color: 'red',
+                                text: '确定',
+                                handle: () => {
+                                    return new Promise(resolve => {
+                                        this.loadingFlag = false;
+                                        setTimeout(resolve, 500)
+                                    })
+                                }
+                            }
+                        }
+                    })
                 })
 
             },
@@ -107,6 +130,7 @@
             }
 
         },
+
 
     }
 </script>

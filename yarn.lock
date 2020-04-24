@@ -8197,6 +8197,11 @@ vue@^2.6.10:
   resolved "https://registry.npm.taobao.org/vue/download/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha1-dllNh31LEiNEBuhONSdcbVFBJcU=
 
+vuetify-dialog@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.npm.taobao.org/vuetify-dialog/download/vuetify-dialog-2.0.2.tgz#1bc0db21988e085adc6bf32c0e9c902b739bebf0"
+  integrity sha1-G8DbIZiOCFrca/MsDpyQK3Ob6/A=
+
 vuetify-loader@^1.2.2:
   version "1.4.3"
   resolved "https://registry.npm.taobao.org/vuetify-loader/download/vuetify-loader-1.4.3.tgz#df1323c558be09890877e5fbe817b3a71a6c538d"

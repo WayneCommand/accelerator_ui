@@ -37,35 +37,22 @@
     export default {
         name: "Message",
         props:{
-
+            dialog: Boolean,
+            title: String,
+            text: String,
+            primaryBtn: String,
+            confirmCall:Function
         },
         data(){
             return{
-                dialog: true,
-                title: "title",
-                text: "oh. nothing :)",
-                primaryBtn: "confirm"
+
+
+
             }
         },
         methods: {
-            show(cb){
-                typeof cb === 'function' && cb.call(this,this)
-                return new Promise(resolve=>{
-                    this.resolve = resolve
-                })
-            },
-            confirm(){
-                this.resolve('confirm')
-                this.hide()
-            },
-            cancel(){
-                this.resolve('cancel')
-                this.hide()
-            },
-            hide(){
-                this.dialog = false;
-                document.body.removeChild(this.$el)
-                this.$destroy()
+            confirm:function () {
+                this.confirmCall();
             }
         }
     }

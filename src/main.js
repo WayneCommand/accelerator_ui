@@ -4,11 +4,19 @@ import vuetify from './plugins/vuetify';
 import request from "./plugins/requests";
 import store from './store/index'
 import router from "./router";
+import VuetifyDialog from 'vuetify-dialog'
+import 'vuetify-dialog/dist/vuetify-dialog.css'
 
 Vue.prototype.$get = request.get;
 Vue.prototype.$post = request.post;
 
 Vue.config.productionTip = false;
+
+Vue.use(VuetifyDialog, {
+  context: {
+    vuetify
+  }
+})
 
 new Vue({
   vuetify,
