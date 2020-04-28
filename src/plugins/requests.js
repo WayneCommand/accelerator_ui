@@ -36,11 +36,39 @@ REQUEST.interceptors.response.use((config) => {
                 break;
             case 403:
             case 401:
-                //TODO notify error
+                this.$dialog.confirm({
+                    text: 'CODE 401/403',
+                    title: '很抱歉我们发生了问题, 请再试一次.',
+                    actions: {
+                        true: {
+                            color: 'red',
+                            text: '确定',
+                        }
+                    }
+                })
                 break;
             default:
-                //TODO notify error
-                break;
+                this.$dialog.confirm({
+                    text: 'CODE G1VE #P',
+                    title: '很抱歉我们发生了问题, 请再试一次.',
+                    actions: {
+                        /*false: {
+                            text: '取消',
+                            handle: () => {
+                                this.loadingFlag = false;
+                            }
+                        },*/
+                        true: {
+                            color: 'red',
+                            text: '确定',
+                            handle: () => {
+                                /*return new Promise(resolve => {
+                                    setTimeout(resolve, 500)
+                                })*/
+                            }
+                        }
+                    }
+                })
         }
     }
     return Promise.reject(error)

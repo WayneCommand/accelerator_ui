@@ -25,7 +25,7 @@
                                     </v-container>
                                     <v-btn
                                             color="primary"
-                                            @click="loginStep = 2"
+                                            @click="lookupAccount"
                                             :disabled="name.length === 0"
                                     >
                                         下一步
@@ -89,13 +89,13 @@
 
                 api.login.loginByPassword({
                     username: this.name,
-                    password:this.password
+                    password: this.password
                 }).then(resp => {
-                    if (resp.data.state === "success"){
+                    if (resp.data.state === "success") {
                         this.saveLogin(resp.headers['x-auth-token']);
                         this.loadingFlag = false;
                         this.$router.replace("/profile")
-                    }else {
+                    } else {
                         this.$dialog.notify.warning(resp.data.msg, {
                             position: 'top-right',
                             timeout: 3000
@@ -103,36 +103,34 @@
                         this.loadingFlag = false;
                     }
                 }).catch(() => {
-                    this.$dialog.confirm({
-                        text: '请重新再试一下, 不行的话就关掉.',
-                        title: '发生了错误',
-                        actions: {
-                            /*false: {
-                                text: '取消',
-                                handle: () => {
-                                    this.loadingFlag = false;
-                                }
-                            },*/
-                            true: {
-                                color: 'red',
-                                text: '确定',
-                                handle: () => {
-                                    this.loadingFlag = false;
+                    this.loadingFlag = false;
+                })
 
-                                    /*return new Promise(resolve => {
-                                        setTimeout(resolve, 500)
-                                    })*/
-                                }
-                            }
-                        }
-                    })
+            },
+            lookupAccount: function () {
+                this.loadingFlag = true;
+
+                api.login.lookup({
+                    username: this.name
+                }).then((resp) => {
+                    if (resp.data.isExist === "true") {
+                        this.loginStep = 2;
+                    }else{
+                        this.$dialog.notify.warning(resp.data.msg,{
+                            position: 'top-right',
+                            timeout: 3000
+                        })
+                    }
+                    this.loadingFlag = false;
+                }).catch(() => {
+                    this.loadingFlag = false;
                 })
 
             },
             ...mapMutations({
-                setToken:'account/setToken'
+                setToken: 'account/setToken'
             }),
-            saveLogin(token){
+            saveLogin(token) {
                 this.setToken(token);
             }
 
