@@ -96,25 +96,32 @@
                         this.loadingFlag = false;
                         this.$router.replace("/profile")
                     }else {
-                        this.$dialog.notify.warning('密码不对 请重试.', {
+                        this.$dialog.notify.warning(resp.data.msg, {
                             position: 'top-right',
                             timeout: 3000
                         })
+                        this.loadingFlag = false;
                     }
                 }).catch(() => {
                     this.$dialog.confirm({
                         text: '请重新再试一下, 不行的话就关掉.',
                         title: '发生了错误',
                         actions: {
-                            false: '取消',
+                            /*false: {
+                                text: '取消',
+                                handle: () => {
+                                    this.loadingFlag = false;
+                                }
+                            },*/
                             true: {
                                 color: 'red',
                                 text: '确定',
                                 handle: () => {
-                                    return new Promise(resolve => {
-                                        this.loadingFlag = false;
+                                    this.loadingFlag = false;
+
+                                    /*return new Promise(resolve => {
                                         setTimeout(resolve, 500)
-                                    })
+                                    })*/
                                 }
                             }
                         }
