@@ -17,7 +17,7 @@
             </v-list-item>
             <v-list-item link to="/profile/myinfo">
                 <v-list-item-icon>
-                    <v-icon>mdi-account-details</v-icon>
+                    <v-icon>mdi-account-card-details</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>个人信息</v-list-item-title>
             </v-list-item>

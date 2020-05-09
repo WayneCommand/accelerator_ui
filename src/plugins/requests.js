@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from '../store'
+import Vue from 'vue'
 
 // 统一配置
 let REQUEST = axios.create({
@@ -29,16 +30,19 @@ REQUEST.interceptors.response.use((config) => {
     return config
 }, (error) => {
     if (error.response) {
-        let errorMessage = error.response.data === null ? '系统内部异常，请联系网站管理员' : error.response.data.message;
+        let errorMessage = error.response.data.msg === null || error.response.data.msg === undefined
+            ? '很抱歉我们发生了问题, 请再试一次.' : error.response.data.msg;
+
         switch (error.response.status) {
+
             case 404:
                 //TODO notify error
                 break;
             case 403:
             case 401:
-                this.$dialog.confirm({
-                    text: 'CODE 401/403',
-                    title: '很抱歉我们发生了问题, 请再试一次.',
+                Vue.prototype.$dialog.confirm({
+                    text: errorMessage,
+                    title: 'CODE [401/403]',
                     actions: {
                         true: {
                             color: 'red',
@@ -48,9 +52,9 @@ REQUEST.interceptors.response.use((config) => {
                 })
                 break;
             default:
-                this.$dialog.confirm({
-                    text: 'CODE G1VE #P',
-                    title: '很抱歉我们发生了问题, 请再试一次.',
+                Vue.prototype.$dialog.confirm({
+                    text: errorMessage,
+                    title: 'CODE [G1VE #P]',
                     actions: {
                         /*false: {
                             text: '取消',
@@ -69,6 +73,8 @@ REQUEST.interceptors.response.use((config) => {
                         }
                     }
                 })
+
+
         }
     }
     return Promise.reject(error)
