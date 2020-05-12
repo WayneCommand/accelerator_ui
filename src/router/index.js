@@ -56,10 +56,27 @@ let constRouter = [
     }
 ];
 
+const whiteList = ['/login'];
+
 let router = new VueRouter({
     routes: constRouter
 });
 
-/*const whiteList = ['/login'];*/
+
+//用于控制未登录跳转。
+router.beforeEach((to, from, next) => {
+    //避免递归调用
+    if (whiteList.indexOf(to.path) !== -1) {
+        next()
+    }
+
+    let token = router.app.$store.state.account.token;
+
+    if (token){
+        next()
+    }else {
+        next("/login");
+    }
+})
 
 export default router

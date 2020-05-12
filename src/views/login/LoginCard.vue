@@ -3,7 +3,7 @@
         <v-container fluid fill-height>
             <v-layout align-center justify-center>
                 <v-flex xs12 sm8 md4>
-                    <v-card class="elevation-20" :loading="loadingFlag">
+                    <v-card class="elevation-20" :loading="loading_show">
                         <v-toolbar flat>
                             <v-toolbar-title>登陆</v-toolbar-title>
                             <v-spacer></v-spacer>
@@ -20,13 +20,13 @@
                             <v-stepper-items >
                                 <v-stepper-content step="1" >
                                     <v-container>
-                                        <v-text-field v-model="name" :counter="16" label="用户名"
+                                        <v-text-field v-model="account" :counter="16" label="用户名"
                                                       placeholder="用户名" outlined required></v-text-field>
                                     </v-container>
                                     <v-btn
                                             color="primary"
                                             @click="lookupAccount"
-                                            :disabled="name.length === 0"
+                                            :disabled="account.length === 0"
                                     >
                                         下一步
                                     </v-btn>
@@ -35,9 +35,9 @@
                                     <v-container>
                                         <v-text-field
                                                 v-model="password"
-                                                :append-icon="show1 ? 'visibility' : 'visibility_off'"
-                                                :type="show1 ? 'text' : 'password'"
-                                                @click:append="show1 = !show1"
+                                                :append-icon="pw_show ? 'visibility' : 'visibility_off'"
+                                                :type="pw_show ? 'text' : 'password'"
+                                                @click:append="pw_show = !pw_show"
                                                 :rules="[rules.required, rules.min]"
                                                 name="password"
                                                 label="密码"
@@ -73,10 +73,10 @@
         data: function () {
             return {
                 loginStep: 1,
-                name: "",
+                account: "",
                 password: "",
-                loadingFlag: false,
-                show1: false,
+                loading_show: false,
+                pw_show: false,
                 rules: {
                     required: value => !!value || 'Required.',
                     min: v => v.length >= 6 || 'Min 6 characters',
@@ -85,33 +85,33 @@
         },
         methods: {
             goLogin: function () {
-                this.loadingFlag = true;
+                this.showLoading();
 
                 api.login.loginByPassword({
-                    username: this.name,
+                    username: this.account,
                     password: this.password
                 }).then(resp => {
                     if (resp.data.state === "success") {
                         this.saveLogin(resp.headers['x-auth-token']);
-                        this.loadingFlag = false;
+                        this.hideLoading();
                         this.$router.replace("/profile")
                     } else {
                         this.$dialog.notify.warning(resp.data.msg, {
                             position: 'top-right',
                             timeout: 3000
                         })
-                        this.loadingFlag = false;
+                        this.hideLoading();
                     }
                 }).catch(() => {
-                    this.loadingFlag = false;
+                    this.hideLoading();
                 })
 
             },
             lookupAccount: function () {
-                this.loadingFlag = true;
+                this.loading_show = true;
 
                 api.login.lookup({
-                    username: this.name
+                    username: this.account
                 }).then((resp) => {
                     if (resp.data.isExist === "true") {
                         this.loginStep = 2;
@@ -121,9 +121,9 @@
                             timeout: 3000
                         })
                     }
-                    this.loadingFlag = false;
+                    this.loading_show = false;
                 }).catch(() => {
-                    this.loadingFlag = false;
+                    this.loading_show = false;
                 })
 
             },
@@ -132,8 +132,13 @@
             }),
             saveLogin(token) {
                 this.setToken(token);
+            },
+            showLoading:function () {
+                this.loading_show = true;
+            },
+            hideLoading:function () {
+                this.loading_show = false;
             }
-
         },
 
 
