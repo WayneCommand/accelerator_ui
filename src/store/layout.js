@@ -3,12 +3,13 @@ const state = {
 };
 
 const mutations = {
-    setMenuDisplay(state, display) {
+    setMenu(state, display) {
         state.menu = display;
     }
 };
 
 export default {
+    namespaced: true,
     state,
     mutations
 }

@@ -12,6 +12,8 @@
 </template>
 
 <script>
+    import {mapMutations} from "vuex";
+
     export default {
         name: "Header",
         computed: {
@@ -20,9 +22,15 @@
                     return this.$store.state.layout.menu;
                 },
                 set(value){
-                    this.$store.commit("setMenuDisplay", value);
+                    this.setMenuDisplay(value);
                 }
             }
+        },
+        methods: {
+            ...mapMutations({
+                setMenuDisplay: 'layout/setMenu'
+            }),
+
         }
     }
 </script>
