@@ -27,7 +27,7 @@
                             <v-list-item-subtitle>更改照片可帮助您个性化账号</v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-avatar size="64">
-                            <v-img src="https://blog.inmind.ltd/files/logo"></v-img>
+                            <v-img :src="avatar"></v-img>
                         </v-list-item-avatar>
 
 
@@ -41,7 +41,7 @@
                             <v-list-item-title>昵称</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content>
-                            <v-list-item-title>shenlanAZ</v-list-item-title>
+                            <v-list-item-title>{{nickname}}</v-list-item-title>
                         </v-list-item-content>
 
                     </v-list-item>
@@ -54,7 +54,7 @@
                         </v-list-item-content>
                         <v-list-item-content>
                             <v-list-item-title>******</v-list-item-title>
-                            <v-list-item-subtitle>上次更改密码:2020/10/1</v-list-item-subtitle>
+                            <v-list-item-subtitle v-if="passwordModifyTime !== null">上次更改密码: {{passwordModifyTime}}</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -71,10 +71,8 @@
                             <v-list-item-title>电子邮件</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content>
-                            <v-list-item-title>shenlanluck@gmail.com</v-list-item-title>
-                            <v-list-item-title>shenlan@inhyper.com</v-list-item-title>
+                            <v-list-item-title v-for="email of emails" :key="email">{{email}}</v-list-item-title>
                         </v-list-item-content>
-
                     </v-list-item>
 
                     <v-divider inset></v-divider>
@@ -84,7 +82,7 @@
                             <v-list-item-title>电话</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content>
-                            <v-list-item-title>1230000000</v-list-item-title>
+                            <v-list-item-title v-for="phone of phones" :key="phone">{{phone}}</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -94,8 +92,63 @@
 </template>
 
 <script>
+    import api from "../../../api";
+
     export default {
-        name: "MyInfo"
+        name: "MyInfo",
+        created() {
+            new Promise(resolve => {
+
+                api.myInfo.myInfo()
+                .then(resp =>{
+                    if (resp.data.state === "success"){
+                        this.loadData(resp.data.info);
+                        this.updateData();
+
+                    }else {
+                        this.$dialog.notify.warning(resp.data.msg, {
+                            position: 'top-right',
+                            timeout: 3000
+                        })
+                    }
+                    resolve();
+                }).catch(() => {
+                    resolve();
+                })
+
+
+            });
+        },
+        data:function () {
+            return{
+                nickname: "",
+                avatar: "",
+                passwordModifyTime: "",
+                emails: [],
+                phones: []
+            }
+        },
+        methods: {
+            loadData: function (data) {
+                this.nickname = data.userProfile.nickname;
+                this.avatar = data.userProfile.avatar;
+                this.emails = data.emails;
+                this.phones = data.phones;
+                this.passwordModifyTime = data.passwordModifyTime;
+            },
+            updateData: function () {
+                if (this.nickname === null) {
+                    this.nickname = "你还没有设置昵称。"
+                }
+                if (this.emails.length === 0) {
+                    this.emails.push("你还没有关联邮箱。");
+                }
+                if (this.phones.length === 0) {
+                    this.phones.push("你还没有关联手机。");
+                }
+            }
+        }
+
     }
 </script>
 

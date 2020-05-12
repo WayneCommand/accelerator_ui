@@ -18,7 +18,7 @@ REQUEST.interceptors.request.use((config) => {
 
     // 有 token就带上
     if (store.state.account.token) {
-        config.headers.Authentication = store.state.account.token
+        config.headers['X-AUTH-TOKEN'] = store.state.account.token
     }
     return config
 }, (error) => {
