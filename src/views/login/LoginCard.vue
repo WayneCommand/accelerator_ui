@@ -94,7 +94,7 @@
                     if (resp.data.state === "success") {
                         this.saveLogin(resp.headers['x-auth-token']);
                         this.hideLoading();
-                        this.$router.replace("/profile")
+                        this.$router.replace("/profile/main")
                     } else {
                         this.$dialog.notify.warning(resp.data.msg, {
                             position: 'top-right',

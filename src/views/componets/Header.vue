@@ -12,19 +12,22 @@
 </template>
 
 <script>
-    import {mapMutations} from "vuex";
+    import {mapMutations,mapState} from "vuex";
 
     export default {
         name: "Header",
         computed: {
             drawer:{
                 get(){
-                    return this.$store.state.layout.menu;
+                    return this.menu;
                 },
                 set(value){
                     this.setMenuDisplay(value);
                 }
-            }
+            },
+            ...mapState({
+                menu: state => state.layout.menu
+            })
         },
         methods: {
             ...mapMutations({
