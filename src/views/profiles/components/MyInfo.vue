@@ -41,7 +41,8 @@
                             <v-list-item-title>昵称</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content>
-                            <v-list-item-title>{{nickname}}</v-list-item-title>
+                            <v-list-item-title v-if="nickname">{{nickname}}</v-list-item-title>
+                            <v-list-item-subtitle v-if="!nickname">设置你的昵称</v-list-item-subtitle>
                         </v-list-item-content>
 
                     </v-list-item>
@@ -72,6 +73,7 @@
                         </v-list-item-content>
                         <v-list-item-content>
                             <v-list-item-title v-for="email of emails" :key="email">{{email}}</v-list-item-title>
+                            <v-list-item-subtitle v-if="emails.length === 0">添加电子邮件</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
 
@@ -83,6 +85,7 @@
                         </v-list-item-content>
                         <v-list-item-content>
                             <v-list-item-title v-for="phone of phones" :key="phone">{{phone}}</v-list-item-title>
+                            <v-list-item-subtitle v-if="phones.length === 0">添加手机号码</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -103,8 +106,6 @@
                 .then(resp =>{
                     if (resp.data.state === "success"){
                         this.loadData(resp.data.info);
-                        this.updateData();
-
                     }else {
                         this.$dialog.notify.warning(resp.data.msg, {
                             position: 'top-right',
@@ -135,17 +136,6 @@
                 this.emails = data.emails;
                 this.phones = data.phones;
                 this.passwordModifyTime = data.passwordModifyTime;
-            },
-            updateData: function () {
-                if (this.nickname === null) {
-                    this.nickname = "你还没有设置昵称。"
-                }
-                if (this.emails.length === 0) {
-                    this.emails.push("你还没有关联邮箱。");
-                }
-                if (this.phones.length === 0) {
-                    this.phones.push("你还没有关联手机。");
-                }
             }
         }
 

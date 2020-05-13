@@ -7,8 +7,6 @@
                     <h1 class="font-weight-regular py-3">安全性</h1>
                     <h4 class="font-weight-light py-3">您在 Accelerator 服务中确保您帐号安全的设置和建议</h4>
                 </v-flex>
-
-
             </v-card>
 
             <!-- 登陆卡 -->
@@ -22,7 +20,7 @@
                             <v-list-item-title>密码</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content>
-                            <v-list-item-subtitle>上次更改时间：2020/10/1</v-list-item-subtitle>
+                            <v-list-item-subtitle v-if="passwordModifyTime">上次更改时间：{{passwordModifyTime}}</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
 
@@ -33,10 +31,10 @@
                             <v-list-item-title>使用您的手机登陆</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-icon>
-                            <v-icon>mdi-do-not-disturb</v-icon>
+                            <v-icon>{{switchIconConst[phoneToLogin] || "mdi-alert-circle"}}</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title>关闭</v-list-item-title>
+                            <v-list-item-title>{{switchTextConst[phoneToLogin] || "不可用"}}</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
 
@@ -47,10 +45,10 @@
                             <v-list-item-title>二步验证</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-icon>
-                            <v-icon>mdi-do-not-disturb</v-icon>
+                            <v-icon>{{switchIconConst[twoStepVerify] || "mdi-alert-circle"}}</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title>关闭</v-list-item-title>
+                            <v-list-item-title>{{switchTextConst[twoStepVerify] || "不可用"}}</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -68,7 +66,8 @@
                             <v-list-item-title>辅助电话号码</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content>
-                            <v-list-item-subtitle>添加电话号码</v-list-item-subtitle>
+                            <v-list-item-subtitle v-if="!phone">添加辅助电话</v-list-item-subtitle>
+                            <v-list-item-title v-if="phone">{{phone}}</v-list-item-title>
                         </v-list-item-content>
 
                     </v-list-item>
@@ -80,7 +79,8 @@
                             <v-list-item-title>辅助邮箱</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content>
-                            <v-list-item-title>shenlanluck@gmail.com</v-list-item-title>
+                            <v-list-item-subtitle v-if="!recoveryEmail">添加辅助邮箱</v-list-item-subtitle>
+                            <v-list-item-title v-if="recoveryEmail">{{recoveryEmail}}</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -93,39 +93,15 @@
                 <v-card-title>您的设备</v-card-title>
                 <v-card-text>您目前已在以下设备上登录 Accelerator 帐号</v-card-text>
                 <v-list>
-                    <v-list-item>
-                        <v-list-item-icon>
-                            <v-icon>mdi-laptop-windows</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title>Windows</v-list-item-title>
-                        </v-list-item-content>
-                        <v-list-item-content>
-                            <v-list-item-title>
-                                <v-icon>mdi-check-circle</v-icon>
-                                此设备1
-                            </v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-
-                    <v-divider inset></v-divider>
-
-                    <v-list-item>
-                        <v-list-item-icon>
-                            <v-icon>mdi-laptop</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title>MacBook</v-list-item-title>
-                            <v-list-item-subtitle>日本东京都 - 8月20日</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-
-                    <v-divider inset></v-divider>
-
+                    <Device v-for="deviceToken of deviceTokenList"
+                            :device-type="deviceToken.deviceType"
+                            :device-name="deviceToken.deviceName"
+                            :addr="deviceToken.addr"
+                            :current-device="deviceToken.currentDevice"
+                            :func="deviceToken.func || function() {} "></Device>
                     <v-list-item @click="">
                         <v-list-item-content>管理设备</v-list-item-content>
                     </v-list-item>
-
                 </v-list>
             </v-card>
 
@@ -152,8 +128,79 @@
 </template>
 
 <script>
+    import Device from "../../componets/profile/Device";
+    import api from "../../../api";
     export default {
-        name: "Safety"
+        name: "Safety",
+        components: {Device},
+        created() {
+            new Promise(resolve => {
+
+                api.mySafety.mySafety()
+                    .then(resp =>{
+                        if (resp.data.state === "success"){
+                            this.loadData(resp.data.safety);
+                        }else {
+                            this.$dialog.notify.warning(resp.data.msg, {
+                                position: 'top-right',
+                                timeout: 3000
+                            })
+                        }
+                        resolve();
+                    }).catch(() => {
+                    resolve();
+                })
+
+
+            });
+        },
+        data:function () {
+            return {
+                passwordModifyTime: "",
+                phoneToLogin:0,
+                twoStepVerify:0,
+                phone:"",
+                recoveryEmail:"",
+                deviceTokenList: [
+                    {
+                        "deviceType": "windows",
+                        "deviceName": "Surface Book 2",
+                        "addr": "上海市徐汇区",
+                        currentDevice: true,
+                    },
+                    {
+                        "deviceType": "android",
+                        "deviceName": "Samsung Note 9",
+                        "addr": "日本东京市",
+                        currentDevice: false,
+                    },
+                    {
+                        "deviceType": "unknown",
+                        "deviceName": "unknown",
+                        "addr": null,
+                        currentDevice: false,
+                        func: () => {}
+                    }
+                ],
+                switchTextConst: {
+                    0: "关闭",
+                    1: "已开启"
+                },
+                switchIconConst: {
+                    0: "mdi-do-not-disturb",
+                    1: "mdi-check-circle"
+                },
+            };
+        },
+        methods:{
+            loadData(data){
+                this.passwordModifyTime = data.userAccount.passwordModifyTime;
+                this.phoneToLogin = data.userAccount.phoneToLogin;
+                this.twoStepVerify = data.userAccount.twoStepVerify;
+                this.phone = data.userAccount.phone;
+                this.recoveryEmail = data.userAccount.recoveryEmail;
+            }
+        }
     }
 </script>
 
