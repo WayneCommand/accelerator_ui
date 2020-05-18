@@ -10,7 +10,7 @@
             </v-list-item-content>
             <v-list-item-content v-if="currentDevice">
                 <v-list-item-title>
-                    <v-icon>mdi-check-circle</v-icon>
+                    <v-icon color="#1E88E5">mdi-check-circle</v-icon>
                     此设备
                 </v-list-item-title>
             </v-list-item-content>

@@ -5,7 +5,8 @@ export default {
         expireTime: "",
         user: {},
         permissions: {},
-        roles: {}
+        roles: {},
+        passwordEditorDialog:false,
     },
     mutations: {
         setToken (state, val) {
@@ -22,6 +23,9 @@ export default {
         },
         setRoles (state, val) {
             state.roles = val
+        },
+        setPasswordEditorDialog(state, val){
+            state.passwordEditorDialog = val;
         }
     }
 }

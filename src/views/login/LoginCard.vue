@@ -20,8 +20,12 @@
                             <v-stepper-items >
                                 <v-stepper-content step="1" >
                                     <v-container>
-                                        <v-text-field v-model="account" :counter="16" label="用户名"
-                                                      placeholder="用户名" outlined required></v-text-field>
+                                        <v-text-field v-model="account"
+                                                      :counter="16"
+                                                      label="用户名"
+                                                      placeholder="用户名"
+                                                      @keyup.13="lookupAccount"
+                                                      outlined required></v-text-field>
                                     </v-container>
                                     <v-btn
                                             color="primary"
@@ -42,9 +46,9 @@
                                                 name="password"
                                                 label="密码"
                                                 hint="至少6个字符"
-                                                counter
                                                 placeholder="密码"
-                                                outlined></v-text-field>
+                                                @keyup.13="goLogin"
+                                                counter outlined></v-text-field>
                                     </v-container>
                                     <v-btn
                                             color="primary"

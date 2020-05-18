@@ -36,7 +36,7 @@
 
                     <v-divider inset></v-divider>
 
-                    <v-list-item @click="">
+                    <v-list-item @click="openEditor('nickname')">
                         <v-list-item-content>
                             <v-list-item-title>昵称</v-list-item-title>
                         </v-list-item-content>
@@ -49,7 +49,7 @@
 
                     <v-divider inset></v-divider>
 
-                    <v-list-item @click="">
+                    <v-list-item @click="openPasswordEditor">
                         <v-list-item-content>
                             <v-list-item-title>密码</v-list-item-title>
                         </v-list-item-content>
@@ -67,7 +67,7 @@
             >
                 <v-card-title>联系信息</v-card-title>
                 <v-list>
-                    <v-list-item @click="">
+                    <v-list-item @click="openEditor('email')">
                         <v-list-item-content>
                             <v-list-item-title>电子邮件</v-list-item-title>
                         </v-list-item-content>
@@ -79,7 +79,7 @@
 
                     <v-divider inset></v-divider>
 
-                    <v-list-item @click="">
+                    <v-list-item @click="openEditor('phone')">
                         <v-list-item-content>
                             <v-list-item-title>电话</v-list-item-title>
                         </v-list-item-content>
@@ -91,14 +91,20 @@
                 </v-list>
             </v-card>
         </v-flex>
+        <InfoEditDialog></InfoEditDialog>
+        <PasswordEditDialog></PasswordEditDialog>
     </v-layout>
 </template>
 
 <script>
     import api from "../../../api";
+    import {mapState,mapMutations} from 'vuex'
+    import InfoEditDialog from "./dialogs/Info-Edit-Dialog";
+    import PasswordEditDialog from "./dialogs/Password-Edit-Dialog";
 
     export default {
         name: "MyInfo",
+        components: {PasswordEditDialog, InfoEditDialog},
         created() {
             new Promise(resolve => {
 
@@ -130,13 +136,31 @@
             }
         },
         methods: {
+            ...mapMutations({
+                setEditorDialog: 'myinfo/setInfoEditorDialog',
+                setEditorType: 'myinfo/setInfoEditorType',
+                setPasswordEditorDialog: 'account/setPasswordEditorDialog'
+            }),
             loadData: function (data) {
                 this.nickname = data.userProfile.nickname;
                 this.avatar = data.userProfile.avatar;
                 this.emails = data.emails;
                 this.phones = data.phones;
                 this.passwordModifyTime = data.passwordModifyTime;
+            },
+            openEditor:function (module) {
+                this.setEditorType(module);
+                this.setEditorDialog(true);
+            },
+            openPasswordEditor(){
+                this.setPasswordEditorDialog(true);
             }
+
+        },
+        computed:{
+            ...mapState({
+                infoNicknameDialog: state => state.myinfo.dialog
+            })
         }
 
     }
