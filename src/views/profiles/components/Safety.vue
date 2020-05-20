@@ -31,7 +31,7 @@
                             <v-list-item-title>使用您的手机登陆</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-icon>
-                            <v-icon>{{switchIconConst[phoneToLogin] || "mdi-alert-circle"}}</v-icon>
+                            <v-icon :color="phoneToLogin === 1 ? '#1E88E5' : ''">{{switchIconConst[phoneToLogin] || "mdi-alert-circle"}}</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
                             <v-list-item-title>{{switchTextConst[phoneToLogin] || "不可用"}}</v-list-item-title>

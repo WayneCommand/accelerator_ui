@@ -107,23 +107,10 @@
         components: {PasswordEditDialog, InfoEditDialog},
         created() {
             new Promise(resolve => {
-
-                api.myInfo.myInfo()
-                .then(resp =>{
-                    if (resp.data.state === "success"){
-                        this.loadData(resp.data.info);
-                    }else {
-                        this.$dialog.notify.warning(resp.data.msg, {
-                            position: 'top-right',
-                            timeout: 3000
-                        })
-                    }
-                    resolve();
-                }).catch(() => {
+                this.loadData(resolve)
+                .catch(() => {
                     resolve();
                 })
-
-
             });
         },
         data:function () {
@@ -141,7 +128,22 @@
                 setEditorType: 'myinfo/setInfoEditorType',
                 setPasswordEditorDialog: 'account/setPasswordEditorDialog'
             }),
-            loadData: function (data) {
+            loadData:function(resolve){
+                return api.myInfo.myInfo()
+                    .then(resp =>{
+                        if (resp.data.state === "success"){
+                            this.handleData(resp.data.info);
+                        }else {
+                            this.$dialog.notify.warning(resp.data.msg, {
+                                position: 'top-right',
+                                timeout: 3000
+                            })
+                        }
+                        if (resolve)
+                            resolve();
+                    })
+            },
+            handleData: function (data) {
                 this.nickname = data.userProfile.nickname;
                 this.avatar = data.userProfile.avatar;
                 this.emails = data.emails;
@@ -154,13 +156,20 @@
             },
             openPasswordEditor(){
                 this.setPasswordEditorDialog(true);
-            }
+            },
 
         },
         computed:{
             ...mapState({
-                infoNicknameDialog: state => state.myinfo.dialog
+                infoEditorDialog: state => state.myinfo.infoEditorDialog
             })
+        },
+        watch:{
+            infoEditorDialog(val) {
+                if (!val)
+                    this.loadData();
+
+            }
         }
 
     }

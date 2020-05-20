@@ -30,8 +30,11 @@ REQUEST.interceptors.response.use((config) => {
     return config
 }, (error) => {
     if (error.response) {
-        let errorMessage = error.response.data.msg === null || error.response.data.msg === undefined
-            ? '很抱歉我们发生了问题, 请再试一次.' : error.response.data.msg;
+
+        let errorMessage = '很抱歉我们发生了问题, 请再试一次.';
+        if (error.response.data && error.response.data.msg)
+            errorMessage = error.response.data.msg;
+
 
         switch (error.response.status) {
 
