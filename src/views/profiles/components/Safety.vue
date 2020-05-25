@@ -66,8 +66,8 @@
                             <v-list-item-title>辅助电话号码</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content>
-                            <v-list-item-subtitle v-if="!phone">添加辅助电话</v-list-item-subtitle>
-                            <v-list-item-title v-if="phone">{{phone}}</v-list-item-title>
+                            <v-list-item-subtitle v-if="!recoveryPhone">添加辅助电话</v-list-item-subtitle>
+                            <v-list-item-title v-if="recoveryPhone">{{recoveryPhone}}</v-list-item-title>
                         </v-list-item-content>
 
                     </v-list-item>
@@ -172,7 +172,7 @@
                 passwordModifyTime: "",
                 phoneToLogin:0,
                 twoStepVerify:0,
-                phone:"",
+                recoveryPhone:"",
                 recoveryEmail:"",
                 deviceTokenList: [
                     {
@@ -217,7 +217,7 @@
                 this.passwordModifyTime = data.userAccount.passwordModifyTime;
                 this.phoneToLogin = data.userAccount.phoneToLogin;
                 this.twoStepVerify = data.userAccount.twoStepVerify;
-                this.phone = data.userAccount.phone;
+                this.recoveryPhone = data.userAccount.recoveryPhone;
                 this.recoveryEmail = data.userAccount.recoveryEmail;
             },
             openPasswordEditor(){

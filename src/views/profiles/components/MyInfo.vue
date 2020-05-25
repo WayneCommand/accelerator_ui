@@ -66,6 +66,11 @@
                     class="mx-auto my-5"
             >
                 <v-card-title>联系信息</v-card-title>
+                <v-card-text>
+                    使用 Accelerator 服务的应用获取的信息。<br>
+                    这里的信息无需验证，如果有应用尝试获取这些信息，我们会按照下面的顺序传递给应用。<br>
+                    您也可以自定义顺序。
+                </v-card-text>
                 <v-list>
                     <v-list-item @click="openEditor('email')">
                         <v-list-item-content>

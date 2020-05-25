@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <v-dialog v-model="dialog" fullscreen hide-overlay persistent transition="dialog-bottom-transition">
         <v-card>
 
             <v-toolbar dark color="primary">

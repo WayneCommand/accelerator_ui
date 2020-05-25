@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <v-dialog v-model="dialog" fullscreen hide-overlay persistent transition="dialog-bottom-transition">
         <v-card>
 
             <v-toolbar dark color="primary">
@@ -24,7 +24,7 @@
                 </v-flex>
             </v-container>
             <v-container class="my-5" v-if="editorType === 'email'">
-                <v-subheader>添加邮箱</v-subheader>
+                <v-subheader>修改邮箱</v-subheader>
                 <v-flex sm5 md5 class="mx-5">
                     <v-text-field v-model="email"
                                   :counter="16"
@@ -34,7 +34,7 @@
                 </v-flex>
             </v-container>
             <v-container class="my-5" v-if="editorType === 'phone'">
-                <v-subheader>添加手机</v-subheader>
+                <v-subheader>修改手机</v-subheader>
                 <v-flex sm5 md5 class="mx-5">
                     <v-text-field v-model="phone"
                                   :counter="15"
@@ -71,8 +71,8 @@
                     let profile = resp.data.info.userProfile;
 
                     this.nickname = profile.nickname;
-                    this.email = "";
-                    this.phone = "";
+                    this.email = profile.email;
+                    this.phone = profile.phone;
                 })
             },
             closeEditorDialog:function () {
@@ -81,8 +81,19 @@
             updateProfile:function () {
                 let updateEntity = {};
 
-                if (this.editorType === 'nickname')
-                    updateEntity.nickname = this.nickname;
+                console.log(this.editorType);
+
+                switch (this.editorType) {
+                    case 'nickname' :
+                        updateEntity.nickname = this.nickname;
+                        break;
+                    case 'email':
+                        updateEntity.email = this.email;
+                        break;
+                    case 'phone':
+                        updateEntity.phone = this.phone;
+                        break;
+                }
 
                 api.myInfo.updateProfile(updateEntity)
                     .then(resp => {

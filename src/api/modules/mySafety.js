@@ -9,6 +9,15 @@ export default {
     },
     changePassword(obj) {
         return req.post("/user/change_password", obj)
+    },
+    verifyRecoveryEmail(obj){
+        return req.post("/user/verify_recovery_email", obj);
+    },
+    updateRecoveryEmail(obj){
+        return req.post("/user/update_recovery_email", obj);
+    },
+    updateRecoveryPhone(obj){
+        return req.post("/user/update_recovery_phone", obj);
     }
 
 }
