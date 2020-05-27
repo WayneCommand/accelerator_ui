@@ -4,10 +4,13 @@
 
 ## 技术栈
 - vue
+- vue-cli
 - vuetify theme
+- vuetify-dialog
 - vuex
 - vue router
 - axios
+- yarn
 
 ## Project setup
 ```
