@@ -1,6 +1,8 @@
 import axios from 'axios'
-import store from '../store'
 import Vue from 'vue'
+import api from "../api";
+
+const jwt_decode = require('jwt-decode');
 
 // 统一配置
 let REQUEST = axios.create({
@@ -12,14 +14,26 @@ let REQUEST = axios.create({
     }
 });
 
+let requestRefreshToken = false;
+
 // 拦截请求
 REQUEST.interceptors.request.use((config) => {
-    let expireTime = store.state.account.expireTime;
+    let token = localStorage.getItem("token");
+    let expireTime = Number.parseInt(localStorage.getItem("expireTime"));
 
-    // 有 token就带上
-    if (store.state.account.token) {
-        config.headers['X-AUTH-TOKEN'] = store.state.account.token
+    //如果token是过期的 路由会拦截掉并跳转登录
+    if (token){
+        //过期5min之前 需要更换token
+        if (new Date().getTime() > (expireTime - 5 * 60 * 1000) && !requestRefreshToken) {
+            requestRefreshToken = true;
+            //续期逻辑
+
+            //api.login.refreshToken({account: "shenlan"});
+
+        }
+        config.headers['X-AUTH-TOKEN'] = token;
     }
+
     return config
 }, (error) => {
     return Promise.reject(error)
@@ -35,9 +49,7 @@ REQUEST.interceptors.response.use((config) => {
         if (error.response.data && error.response.data.msg)
             errorMessage = error.response.data.msg;
 
-
         switch (error.response.status) {
-
             case 404:
                 //TODO notify error
                 break;
@@ -82,6 +94,13 @@ REQUEST.interceptors.response.use((config) => {
     }
     return Promise.reject(error)
 });
+
+function saveLogin(token) {
+    let decode = jwt_decode(token);
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("expireTime", Number.parseInt(decode.exp) * 1000);
+}
 
 const request = {
     post(url, params) {

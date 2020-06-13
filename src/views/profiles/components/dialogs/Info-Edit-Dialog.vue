@@ -81,8 +81,6 @@
             updateProfile:function () {
                 let updateEntity = {};
 
-                console.log(this.editorType);
-
                 switch (this.editorType) {
                     case 'nickname' :
                         updateEntity.nickname = this.nickname;

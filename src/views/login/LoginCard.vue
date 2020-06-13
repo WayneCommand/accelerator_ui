@@ -71,6 +71,7 @@
 <script>
     import api from '../../api/index'
     import {mapMutations} from 'vuex'
+    const jwt_decode = require('jwt-decode');
 
     export default {
         name: "LoginCard",
@@ -131,11 +132,11 @@
                 })
 
             },
-            ...mapMutations({
-                setToken: 'account/setToken'
-            }),
             saveLogin(token) {
-                this.setToken(token);
+                let decode = jwt_decode(token);
+
+                localStorage.setItem("token", token);
+                localStorage.setItem("expireTime", Number.parseInt(decode.exp) * 1000);
             },
             showLoading:function () {
                 this.loading_show = true;
@@ -144,8 +145,6 @@
                 this.loading_show = false;
             }
         },
-
-
     }
 </script>
 

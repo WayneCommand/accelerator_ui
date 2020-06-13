@@ -6,5 +6,8 @@ export default {
     },
     lookup(obj){
         return req.get("/login/lookup", obj);
+    },
+    refreshToken(obj){
+        return req.post("/login/refreshToken",obj)
     }
 }

@@ -70,13 +70,18 @@ router.beforeEach((to, from, next) => {
         next()
     }
 
-    let token = router.app.$store.state.account.token;
+    let token = localStorage.getItem("token");
+    let expireTime = Number.parseInt(localStorage.getItem("expireTime"));
 
-    if (token){
+    //检查localstorage里有没有token
+    //如果有token则判断是否已过期
+    //过期就需要跳转到登陆页面
+    if (token && new Date().getTime() < expireTime){
         next()
-    }else {
+    }else{
         next("/login");
     }
+
 })
 
 export default router
