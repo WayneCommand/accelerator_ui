@@ -56,7 +56,7 @@ let constRouter = [
     }
 ];
 
-const whiteList = ['/login'];
+const permitList = ['/login'];
 
 let router = new VueRouter({
     routes: constRouter
@@ -66,7 +66,7 @@ let router = new VueRouter({
 //用于控制未登录跳转。
 router.beforeEach((to, from, next) => {
     //避免递归调用
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (permitList.indexOf(to.path) !== -1) {
         next()
     }
 
