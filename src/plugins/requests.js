@@ -24,11 +24,20 @@ REQUEST.interceptors.request.use((config) => {
     //如果token是过期的 路由会拦截掉并跳转登录
     if (token){
         //过期5min之前 需要更换token
-        if (new Date().getTime() > (expireTime - 5 * 60 * 1000) && !requestRefreshToken) {
+        if (new Date().getTime() > (expireTime - 5 * 60 * 1000)
+            && new Date().getTime() < expireTime
+            && !requestRefreshToken) {
             requestRefreshToken = true;
-            //续期逻辑
 
-            //api.login.refreshToken({account: "shenlan"});
+            //续期逻辑
+            api.login.refreshToken({account: "shenlan"})
+                .then(resp => {
+                    //和login的方法一致 需要提取出来
+                    if (resp.data.state === "success"){
+                        saveLogin(resp.headers['x-auth-token'])
+                    }
+                    requestRefreshToken = false;
+                })
 
         }
         config.headers['X-AUTH-TOKEN'] = token;
