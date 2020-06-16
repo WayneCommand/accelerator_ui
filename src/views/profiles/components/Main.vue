@@ -19,7 +19,7 @@
                 <v-card-title>发现安全性问题</v-card-title>
                 <v-card-text>立即解决这些问题，保护您的帐号。</v-card-text>
                 <v-list>
-                    <v-list-item @click="">
+                    <v-list-item v-ripple>
                         <v-list-item-content>
                             <v-list-item-title>确保账号安全</v-list-item-title>
                         </v-list-item-content>
@@ -37,22 +37,18 @@
     export default {
         name: "Main",
         created() {
+            api.myHomePage.myHomePage()
+                .then(resp => {
+                    if (resp.data.state === "success") {
+                        this.setUser(resp.data.homePage.userProfile);
 
-            new Promise(resolve => {
-                api.myHomePage.myHomePage()
-                    .then(resp => {
-                        if (resp.data.state === "success"){
-                            this.setUser(resp.data.homePage.userProfile);
-
-                        }else{
-                            this.$dialog.notify.warning(resp.data.msg, {
-                                position: 'top-right',
-                                timeout: 3000
-                            })
-                        }
-                    })
-            })
-
+                    } else {
+                        this.$dialog.notify.warning(resp.data.msg, {
+                            position: 'top-right',
+                            timeout: 3000
+                        })
+                    }
+                });
         },
         data: function () {
             return{

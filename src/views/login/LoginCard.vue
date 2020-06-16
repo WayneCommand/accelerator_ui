@@ -39,7 +39,7 @@
                                     <v-container>
                                         <v-text-field
                                                 v-model="password"
-                                                :append-icon="pw_show ? 'visibility' : 'visibility_off'"
+                                                :append-icon="pw_show ? 'mdi-eye' : 'mdi-eye-off'"
                                                 :type="pw_show ? 'text' : 'password'"
                                                 @click:append="pw_show = !pw_show"
                                                 :rules="[rules.required, rules.min]"
@@ -70,7 +70,6 @@
 
 <script>
     import api from '../../api/index'
-    import {mapMutations} from 'vuex'
     const jwt_decode = require('jwt-decode');
 
     export default {

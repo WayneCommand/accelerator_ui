@@ -9,7 +9,7 @@
                 <v-toolbar-title>修改安全性</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
-                    <v-btn dark text @click="">保存</v-btn>
+                    <v-btn dark text v-ripple>保存</v-btn>
                 </v-toolbar-items>
             </v-toolbar>
 

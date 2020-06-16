@@ -18,7 +18,7 @@
                 <v-card-title>个人资料</v-card-title>
                 <v-card-text>使用 Accelerator 服务的其他用户可能会看到部分信息。</v-card-text>
                 <v-list>
-                    <v-list-item @click="">
+                    <v-list-item v-ripple>
                         <v-list-item-content>
                             <v-list-item-title>头像</v-list-item-title>
                         </v-list-item-content>

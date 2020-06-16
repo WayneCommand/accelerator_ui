@@ -40,7 +40,7 @@
 
                     <v-divider inset></v-divider>
 
-                    <v-list-item @click="">
+                    <v-list-item v-ripple>
                         <v-list-item-content>
                             <v-list-item-title>二步验证</v-list-item-title>
                         </v-list-item-content>
@@ -94,12 +94,13 @@
                 <v-card-text>您目前已在以下设备上登录 Accelerator 帐号</v-card-text>
                 <v-list>
                     <Device v-for="deviceToken of deviceTokenList"
+                            :key="deviceToken.deviceName"
                             :device-type="deviceToken.deviceType"
                             :device-name="deviceToken.deviceName"
                             :addr="deviceToken.addr"
                             :current-device="deviceToken.currentDevice"
                             :func="deviceToken.func || function() {} "></Device>
-                    <v-list-item @click="">
+                    <v-list-item v-ripple>
                         <v-list-item-content>管理设备</v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -111,7 +112,7 @@
             >
                 <v-card-title>登录其他网站</v-card-title>
                 <v-list>
-                    <v-list-item @click="">
+                    <v-list-item v-ripple>
                         <v-list-item-content>
                             <v-list-item-title>使用 Accelerator 登陆</v-list-item-title>
                         </v-list-item-content>
