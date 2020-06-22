@@ -17,10 +17,7 @@ let constRouter = [
     {
         path: '/',
         name: '主页',
-        components: {
-            navigation: Menu,
-            header: Header,
-        }
+        redirect:"/profile/myinfo"
     },
     {
         path: '/login',
