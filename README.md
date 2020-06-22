@@ -14,16 +14,35 @@
 
 ## Project setup
 ```
+yarn(# or yarn install)
+
+# or
+
 npm install
+```
+### Compiles & build & ...
+
+i recommend **vue ui**
+
+```
+vue ui
 ```
 
 ### Compiles and hot-reloads for development
 ```
+yarn serve
+
+# or
+
 npm run serve
 ```
 
 ### Compiles and minifies for production
 ```
+yarn build
+
+# or
+
 npm run build
 ```
 
