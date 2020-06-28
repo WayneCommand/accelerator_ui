@@ -135,8 +135,8 @@ const request = {
         } else {
             _params = '?';
             for (let key in params) {
-                if (params.hasOwnProperty(key) && params[key] !== null) {
-                    _params += `${key}=${params[key]}&`
+                if (Object.prototype.hasOwnProperty.call(params, key) && params[key] !== null) {
+                    _params += `${key}=${params[key]}&`;
                 }
             }
         }

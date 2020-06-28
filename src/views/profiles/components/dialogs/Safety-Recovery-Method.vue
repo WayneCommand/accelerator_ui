@@ -215,18 +215,19 @@
             },
             updateSafetyRecoveryMethod: function () {
                 switch (this.editorType) {
-                    case 'recoveryPhone':
+                    case 'recoveryPhone': {
                         api.mySafety.updateRecoveryPhone({
                             recoveryPhone: this.rPhone
                         }).then(resp => {
-                            if (resp.data.state === "success"){
+                            if (resp.data.state === "success") {
                                 this.rPhoneStep = 4;
-                            }else{
+                            } else {
                                 this.$dialog.notify.error(resp.data.msg);
                             }
                         });
                         break;
-                    case 'recoveryEmail':
+                    }
+                    case 'recoveryEmail':{
                         let verifyCode = this.emailVerifyList[this.eCodeGroup - 1];
 
                         api.mySafety.updateRecoveryEmail({
@@ -241,6 +242,7 @@
                             }
                         });
                         break;
+                    }
                 }
             },
             loadData:function () {
