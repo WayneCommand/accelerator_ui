@@ -1,5 +1,5 @@
 <template>
-    <v-content>
+    <v-main>
         <v-container fluid fill-height>
             <v-layout align-center justify-center>
                 <v-flex xs12 sm8 md4>
@@ -65,15 +65,21 @@
                 </v-flex>
             </v-layout>
         </v-container>
-    </v-content>
+    </v-main>
 </template>
 
 <script>
     import api from '../../api/index'
+    import {info} from "../../components/utils/access-info";
     const jwt_decode = require('jwt-decode');
 
     export default {
         name: "LoginCard",
+        created() {
+            info().then(data => {
+                this.accessInfo = data;
+            });
+        },
         data: function () {
             return {
                 loginStep: 1,
@@ -84,6 +90,18 @@
                 rules: {
                     required: value => !!value || 'Required.',
                     min: v => v.length >= 6 || 'Min 6 characters',
+                },
+                accessInfo: {
+                    browser:{
+                        name: "",
+                        type: "",
+                        version: ""
+                    },
+                    location:{
+                        country: "",
+                        city: ""
+                    },
+                    ip: ""
                 }
             };
         },
@@ -93,7 +111,13 @@
 
                 api.login.loginByPassword({
                     username: this.account,
-                    password: this.password
+                    password: this.password,
+                    ip: this.accessInfo.ip,
+                    browserName: this.accessInfo.browser.name,
+                    browserType: this.accessInfo.browser.type,
+                    browserVersion: this.accessInfo.browser.version,
+                    locationCountry: this.accessInfo.location.country,
+                    locationCity: this.accessInfo.location.city,
                 }).then(resp => {
                     if (resp.data.state === "success") {
                         this.saveLogin(resp.headers['x-auth-token']);
@@ -119,8 +143,8 @@
                 }).then((resp) => {
                     if (resp.data.isExist === "true") {
                         this.loginStep = 2;
-                    }else{
-                        this.$dialog.notify.warning(resp.data.msg,{
+                    } else {
+                        this.$dialog.notify.warning(resp.data.msg, {
                             position: 'top-right',
                             timeout: 3000
                         })
@@ -137,14 +161,14 @@
                 localStorage.setItem("token", token);
                 localStorage.setItem("expireTime", Number.parseInt(decode.exp) * 1000);
             },
-            showLoading:function () {
+            showLoading: function () {
                 this.loading_show = true;
             },
-            hideLoading:function () {
+            hideLoading: function () {
                 this.loading_show = false;
             }
         },
-    }
+    };
 </script>
 
 <style scoped>

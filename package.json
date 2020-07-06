@@ -10,7 +10,10 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
+    "detect-browser": "^5.1.1",
+    "iplocation": "^7.2.0",
     "jwt-decode": "^2.2.0",
+    "public-ip": "^4.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.2.11",
