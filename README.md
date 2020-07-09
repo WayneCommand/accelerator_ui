@@ -58,3 +58,13 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Sponsors
+
+<h3 align="center">JetBrains</h3>
+
+<p align="center">
+  <a href="https://www.jetbrains.com/?from=accelerator">
+    <img width="260px" src="https://github.com/shenlanAZ/accelerator/blob/master/doc/img/jetbrains-variant-4.svg">
+  </a>
+</p>
