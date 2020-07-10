@@ -14,16 +14,18 @@
 </template>
 
 <script>
-export default {
-  name: 'App',
-  components: {
-  },
-  data: () => ({
-  }),
-  methods:{
-  },
-  created() {
-  }
-};
-
+    import {deviceId} from './components/utils/access-info'
+    export default {
+        name: 'App',
+        components: {},
+        data: () => ({}),
+        methods: {},
+        created() {
+            setTimeout(() => {
+                deviceId().then(id => {
+                    localStorage.setItem("deviceId", id);
+                })
+            }, 500);
+        }
+    };
 </script>

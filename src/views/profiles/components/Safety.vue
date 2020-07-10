@@ -94,10 +94,10 @@
                 <v-card-text>您目前已在以下设备上登录 Accelerator 帐号</v-card-text>
                 <v-list>
                     <Device v-for="deviceToken of deviceTokenList"
-                            :key="deviceToken.deviceName"
+                            :key="deviceToken.deviceId"
                             :device-type="deviceToken.deviceType"
                             :device-name="deviceToken.deviceName"
-                            :addr="deviceToken.addr"
+                            :addr="deviceToken.location"
                             :current-device="deviceToken.currentDevice"
                             :func="deviceToken.func || function() {} "></Device>
                     <v-list-item v-ripple>
@@ -220,6 +220,8 @@
                 this.twoStepVerify = data.userAccount.twoStepVerify;
                 this.recoveryPhone = data.userAccount.recoveryPhone;
                 this.recoveryEmail = data.userAccount.recoveryEmail;
+                this.deviceTokenList = data.deviceTokenList;
+                console.log(data);
             },
             openPasswordEditor(){
                 this.setPasswordEditorDialog(true);

@@ -78,7 +78,7 @@
         created() {
             info().then(data => {
                 this.accessInfo = data;
-            });
+            })
         },
         data: function () {
             return {
@@ -95,13 +95,15 @@
                     browser:{
                         name: "",
                         type: "",
-                        version: ""
+                        version: "",
+                        system: ""
                     },
                     location:{
                         country: "",
                         city: ""
                     },
-                    ip: ""
+                    ip: "",
+                    deviceId: ""
                 }
             };
         },
@@ -109,13 +111,24 @@
             goLogin: function () {
                 this.showLoading();
 
+                if (!localStorage.getItem('deviceId')){
+                    this.$dialog.notify.warning("您的唯一标识未找到，请刷新浏览器 或换一个设备。", {
+                        position: 'top-right',
+                        timeout: 3000
+                    })
+                    this.hideLoading();
+                    return;
+                }
+
                 api.login.loginByPassword({
                     username: this.account,
                     password: this.password,
                     ip: this.accessInfo.ip,
-                    browserName: this.accessInfo.browser.name,
-                    browserType: this.accessInfo.browser.type,
-                    browserVersion: this.accessInfo.browser.version,
+                    deviceId: localStorage.getItem('deviceId'),
+                    deviceName: this.accessInfo.browser.name,
+                    deviceType: this.accessInfo.browser.type,
+                    deviceSystem: this.accessInfo.browser.system,
+                    deviceVersion: this.accessInfo.browser.version,
                     locationCountry: this.accessInfo.location.country,
                     locationCity: this.accessInfo.location.city,
                 }).then(resp => {

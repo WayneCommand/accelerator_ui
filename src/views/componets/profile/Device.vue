@@ -31,7 +31,8 @@
                     "android":"mdi-cellphone-android",
                     "firefox":"mdi-firefox",
                     "chrome":"mdi-google-chrome",
-                    "edge":"mdi-edge",
+                    "edge-chromium":"mdi-microsoft-edge",
+                    "edge":"mdi-microsoft-edge-legacy",
                 }
             }
         },
