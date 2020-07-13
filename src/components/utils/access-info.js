@@ -20,8 +20,9 @@ export const info = async () => {
         },
         ip: v4,
         location: {
-            country: location.country.code,
-            city: location.region.code
+            country: location.country.name,
+            region: location.region.name,
+            city: location.city
         }
     };
 }

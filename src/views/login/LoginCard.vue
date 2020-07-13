@@ -98,8 +98,9 @@
                         version: "",
                         system: ""
                     },
-                    location:{
+                    location: {
                         country: "",
+                        region: "",
                         city: ""
                     },
                     ip: "",
@@ -130,6 +131,7 @@
                     deviceSystem: this.accessInfo.browser.system,
                     deviceVersion: this.accessInfo.browser.version,
                     locationCountry: this.accessInfo.location.country,
+                    locationRegion: this.accessInfo.location.region,
                     locationCity: this.accessInfo.location.city,
                 }).then(resp => {
                     if (resp.data.state === "success") {

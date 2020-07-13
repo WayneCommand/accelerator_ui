@@ -221,7 +221,6 @@
                 this.recoveryPhone = data.userAccount.recoveryPhone;
                 this.recoveryEmail = data.userAccount.recoveryEmail;
                 this.deviceTokenList = data.deviceTokenList;
-                console.log(data);
             },
             openPasswordEditor(){
                 this.setPasswordEditorDialog(true);
