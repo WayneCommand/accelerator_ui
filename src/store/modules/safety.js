@@ -1,6 +1,7 @@
 const state = {
     safetyLoginManagementEditorDialog: false,
     safetyRecoverMethodEditorDialog: false,
+    safetyDevicesEditorDialog: false,
     safetyEditorType: "",
 };
 
@@ -13,6 +14,9 @@ const mutations = {
     },
     setSafetyEditorType(state, val) {
         state.safetyEditorType = val;
+    },
+    setSafetyDevicesEditorDialog(state, val){
+        state.safetyDevicesEditorDialog = val;
     }
 };
 

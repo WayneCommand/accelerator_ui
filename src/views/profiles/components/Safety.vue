@@ -95,12 +95,12 @@
                 <v-list>
                     <Device v-for="deviceToken of deviceTokenList"
                             :key="deviceToken.deviceId"
-                            :device-type="deviceToken.deviceType"
+                            :device-model="deviceToken.deviceModel"
                             :device-name="deviceToken.deviceName"
                             :addr="deviceToken.location"
                             :current-device="deviceToken.currentDevice"
                             :func="deviceToken.func || function() {} "></Device>
-                    <v-list-item v-ripple>
+                    <v-list-item @click="openDevicesManagementEditor">
                         <v-list-item-content>管理设备</v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -127,6 +127,7 @@
             <PasswordEditDialog></PasswordEditDialog>
             <SafetyLoginManagement></SafetyLoginManagement>
             <SafetyRecoveryMethod></SafetyRecoveryMethod>
+            <SafetyDevicesManagement></SafetyDevicesManagement>
         </v-flex>
     </v-layout>
 </template>
@@ -138,10 +139,12 @@
     import {mapState,mapMutations} from 'vuex'
     import SafetyLoginManagement from "./dialogs/Safety-Login-Management";
     import SafetyRecoveryMethod from "./dialogs/Safety-Recovery-Method";
+    import SafetyDevicesManagement from "./dialogs/Safety-Devices-Management";
 
     export default {
         name: "Safety",
         components: {
+            SafetyDevicesManagement,
             SafetyRecoveryMethod,
             SafetyLoginManagement,
             PasswordEditDialog,
@@ -175,27 +178,7 @@
                 twoStepVerify:0,
                 recoveryPhone:"",
                 recoveryEmail:"",
-                deviceTokenList: [
-                    {
-                        "deviceType": "windows",
-                        "deviceName": "Surface Book 2",
-                        "addr": "上海市徐汇区",
-                        currentDevice: true,
-                    },
-                    {
-                        "deviceType": "android",
-                        "deviceName": "Samsung Note 9",
-                        "addr": "日本东京市",
-                        currentDevice: false,
-                    },
-                    {
-                        "deviceType": "unknown",
-                        "deviceName": "unknown",
-                        "addr": null,
-                        currentDevice: false,
-                        func: () => {}
-                    }
-                ],
+                deviceTokenList: [],
                 switchTextConst: {
                     0: "关闭",
                     1: "已开启"
@@ -211,8 +194,8 @@
                 setPasswordEditorDialog: 'account/setPasswordEditorDialog',
                 setLoginManagementDialog: 'safety/setSafetyLoginManagementEditorDialog',
                 setSafetyEditorType: 'safety/setSafetyEditorType',
-                setRecoverMethodEditorDialog: 'safety/setSafetyRecoverMethodEditorDialog'
-
+                setRecoverMethodEditorDialog: 'safety/setSafetyRecoverMethodEditorDialog',
+                setSafetyDevicesEditorDialog: 'safety/setSafetyDevicesEditorDialog'
             }),
             loadData(data){
                 this.passwordModifyTime = data.userAccount.passwordModifyTime;
@@ -232,6 +215,9 @@
             openRecoveryMethodEditor(module){
                 this.setSafetyEditorType(module);
                 this.setRecoverMethodEditorDialog(true);
+            },
+            openDevicesManagementEditor(){
+                this.setSafetyDevicesEditorDialog(true);
             }
         },
         computed:{

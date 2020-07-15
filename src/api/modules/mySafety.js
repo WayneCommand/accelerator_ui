@@ -18,6 +18,9 @@ export default {
     },
     updateRecoveryPhone(obj){
         return req.post("/user/update_recovery_phone", obj);
+    },
+    devices(obj){
+        return req.get("/device/devices", obj);
     }
 
 }

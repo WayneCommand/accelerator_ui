@@ -126,7 +126,7 @@
                     password: this.password,
                     ip: this.accessInfo.ip,
                     deviceId: localStorage.getItem('deviceId'),
-                    deviceName: this.accessInfo.browser.name,
+                    deviceModel: this.accessInfo.browser.name,
                     deviceType: this.accessInfo.browser.type,
                     deviceSystem: this.accessInfo.browser.system,
                     deviceVersion: this.accessInfo.browser.version,

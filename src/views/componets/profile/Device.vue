@@ -2,7 +2,7 @@
     <v-flex>
         <v-list-item @click="func">
             <v-list-item-icon>
-                <v-icon>{{deviceTypeConst[deviceType] || "mdi-spin mdi-orbit"}}</v-icon>
+                <v-icon>{{deviceModelConst[deviceModel] || "mdi-spin mdi-orbit"}}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
                 <v-list-item-title>{{deviceName}}</v-list-item-title>
@@ -24,7 +24,7 @@
         name: "Device",
         data:function () {
             return{
-                deviceTypeConst:{
+                deviceModelConst:{
                     "windows":"mdi-laptop-windows",
                     "macbook":"mdi-laptop-mac",
                     "ios":"mdi-cellphone-iphone",
@@ -37,7 +37,7 @@
             }
         },
         props:{
-            deviceType:String,
+            deviceModel:String,
             deviceName:String,
             addr:String,
             currentDevice:Boolean,
