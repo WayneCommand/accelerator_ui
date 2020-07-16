@@ -1,21 +1,14 @@
 export default {
     namespaced: true,
     state: {
-        token: "",
-        expireTime: "",
         user: {},
         permissions: {},
         roles: {},
         passwordEditorDialog:false,
     },
     mutations: {
-        setToken (state, val) {
-            state.token = val
-        },
-        setExpireTime (state, val) {
-            state.expireTime = val
-        },
         setUser (state, val) {
+            console.log(val);
             state.user = val
         },
         setPermissions (state, val) {

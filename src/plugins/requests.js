@@ -29,8 +29,8 @@ REQUEST.interceptors.request.use((config) => {
             && !requestRefreshToken) {
             requestRefreshToken = true;
 
-            //续期逻辑
-            api.login.refreshToken({account: "shenlan"})
+            //续期逻辑 暂且先不做额外校验(在下个版本支持多用户的时候添加)
+            api.login.refreshToken({account: "accept"})
                 .then(resp => {
                     //和login的方法一致 需要提取出来
                     if (resp.data.state === "success"){

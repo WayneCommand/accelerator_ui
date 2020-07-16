@@ -21,6 +21,12 @@ export default {
     },
     devices(obj){
         return req.get("/device/devices", obj);
+    },
+    deleteDevice(obj){
+        return req.post("/device/delete/" + obj.deviceId, obj);
+    },
+    updateDeviceName(obj){
+        return req.post("/device/update/name", obj);
     }
 
 }

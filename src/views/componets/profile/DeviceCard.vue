@@ -28,7 +28,7 @@
             <v-spacer></v-spacer>
             <v-btn
                     icon
-            @click="edit(deviceId)">
+            @click="edit({deviceId,deviceName})">
                 <v-icon>mdi-pen</v-icon>
             </v-btn>
         </v-card-actions>

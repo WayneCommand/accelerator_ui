@@ -151,25 +151,7 @@
             Device
         },
         created() {
-            new Promise(resolve => {
-
-                api.mySafety.mySafety()
-                    .then(resp =>{
-                        if (resp.data.state === "success"){
-                            this.loadData(resp.data.safety);
-                        }else {
-                            this.$dialog.notify.warning(resp.data.msg, {
-                                position: 'top-right',
-                                timeout: 3000
-                            })
-                        }
-                        resolve();
-                    }).catch(() => {
-                    resolve();
-                })
-
-
-            });
+            this.loadData();
         },
         data:function () {
             return {
@@ -197,7 +179,20 @@
                 setRecoverMethodEditorDialog: 'safety/setSafetyRecoverMethodEditorDialog',
                 setSafetyDevicesEditorDialog: 'safety/setSafetyDevicesEditorDialog'
             }),
-            loadData(data){
+            loadData(){
+                api.mySafety.mySafety()
+                    .then(resp => {
+                        if (resp.data.state === "success") {
+                            this.handleData(resp.data.safety);
+                        } else {
+                            this.$dialog.notify.warning(resp.data.msg, {
+                                position: 'top-right',
+                                timeout: 3000
+                            })
+                        }
+                    });
+            },
+            handleData(data) {
                 this.passwordModifyTime = data.userAccount.passwordModifyTime;
                 this.phoneToLogin = data.userAccount.phoneToLogin;
                 this.twoStepVerify = data.userAccount.twoStepVerify;
@@ -222,8 +217,15 @@
         },
         computed:{
             ...mapState({
-
+                deviceEditorDialog: state => state.safety.safetyDevicesEditorDialog
             })
+        },
+        watch:{
+            deviceEditorDialog(val){
+                if (!val){
+                    this.loadData();
+                }
+            }
         }
     }
 </script>
