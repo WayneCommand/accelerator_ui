@@ -9,5 +9,8 @@ export default {
     },
     refreshToken(obj){
         return req.post("/login/refreshToken",obj)
+    },
+    signUp(obj){
+        return req.post("/login/signUp",obj)
     }
 }

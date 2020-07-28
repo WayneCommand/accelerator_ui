@@ -59,11 +59,14 @@ REQUEST.interceptors.response.use((config) => {
             errorMessage = error.response.data.msg;
 
         switch (error.response.status) {
-            case 404:
-                //TODO notify error
+            case 400:
+                //do nothing
                 break;
-            case 403:
+            case 404:
+                //do nothing
+                break;
             case 401:
+            case 403:
                 Vue.prototype.$dialog.confirm({
                     text: errorMessage,
                     title: 'CODE [401/403]',
@@ -75,6 +78,7 @@ REQUEST.interceptors.response.use((config) => {
                     }
                 })
                 break;
+
             default:
                 Vue.prototype.$dialog.confirm({
                     text: errorMessage,

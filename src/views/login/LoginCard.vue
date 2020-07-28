@@ -5,14 +5,21 @@
                 <v-flex xs12 sm8 md4>
                     <v-card class="elevation-20" :loading="loading_show">
                         <v-toolbar flat>
-                            <v-toolbar-title>登陆</v-toolbar-title>
+                            <v-toolbar-title>{{cardTitle}}</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-btn
+                                    v-if="cardType === 'login'"
                                     text
-                                    href="#"
-                                    target="_blank"
+                                    @click="goRegister"
                             >
                                 注册
+                            </v-btn>
+                            <v-btn
+                                    v-if="cardType === 'register'"
+                                    text
+                                    @click="goLogin"
+                            >
+                                登录
                             </v-btn>
 
                         </v-toolbar>
@@ -24,12 +31,12 @@
                                                       :counter="16"
                                                       label="用户名"
                                                       placeholder="用户名"
-                                                      @keyup.13="lookupAccount"
+                                                      @keyup.13="loginCheckAccount"
                                                       outlined required></v-text-field>
                                     </v-container>
                                     <v-btn
                                             color="primary"
-                                            @click="lookupAccount"
+                                            @click="loginCheckAccount"
                                             :disabled="account.length === 0"
                                     >
                                         下一步
@@ -47,18 +54,98 @@
                                                 label="密码"
                                                 hint="至少6个字符"
                                                 placeholder="密码"
-                                                @keyup.13="goLogin"
+                                                @keyup.13="doLogin"
                                                 counter outlined></v-text-field>
                                     </v-container>
                                     <v-btn
                                             color="primary"
-                                            @click="goLogin"
+                                            @click="doLogin"
                                             :disabled="password.length === 0"
                                     >
                                         Login
                                     </v-btn>
                                     <v-btn text @click="loginStep = 1">上一步</v-btn>
                                 </v-stepper-content>
+                                <v-stepper-content step="10" >
+                                    <v-container>
+                                        <v-text-field v-model="account"
+                                                      :counter="16"
+                                                      label="用户名"
+                                                      placeholder="用户名"
+                                                      @keyup.13="registerCheckAccount"
+                                                      outlined required></v-text-field>
+                                    </v-container>
+                                    <v-btn
+                                            color="primary"
+                                            :disabled="account.length === 0"
+                                            @click="registerCheckAccount"
+                                    >
+                                        下一步
+                                    </v-btn>
+                                </v-stepper-content>
+                                <v-stepper-content step="11" >
+                                    <v-container>
+                                        <v-text-field
+                                                v-model="password"
+                                                :append-icon="pw_show ? 'mdi-eye' : 'mdi-eye-off'"
+                                                :type="pw_show ? 'text' : 'password'"
+                                                @click:append="pw_show = !pw_show"
+                                                :rules="[rules.required, rules.min]"
+                                                name="password"
+                                                label="密码"
+                                                hint="至少6个字符"
+                                                placeholder="密码"
+                                                @keyup.13="registerCheckPassword"
+                                                counter outlined></v-text-field>
+                                    </v-container>
+                                    <v-btn
+                                            color="primary"
+                                            :disabled="account.length === 0"
+                                            @click="registerCheckPassword"
+                                    >
+                                        下一步
+                                    </v-btn>
+                                </v-stepper-content>
+                                <v-stepper-content step="12" >
+                                    <v-container>
+                                        <v-text-field
+                                                v-model="rePassword"
+                                                type="password"
+                                                :rules="[rules.required, rules.min,rules.rePassword]"
+                                                name="rePassword"
+                                                label="重复密码"
+                                                hint="至少6个字符"
+                                                placeholder="重复密码"
+                                                @keyup.13="registerCheckRePassword"
+                                                counter outlined></v-text-field>
+                                    </v-container>
+                                    <v-btn
+                                            color="primary"
+                                            :disabled="account.length === 0"
+                                            @click="registerCheckRePassword"
+                                    >
+                                        下一步
+                                    </v-btn>
+                                </v-stepper-content>
+                                <v-stepper-content step="13" >
+                                    <v-container>
+                                        <v-alert
+                                                outlined
+                                                type="success"
+                                                text
+                                        >
+                                            您的账户已完成注册, 现在就去登陆吧。
+                                        </v-alert>
+                                    </v-container>
+                                    <v-btn
+                                            color="success"
+                                            :disabled="account.length === 0"
+                                            @click="goLogin"
+                                    >
+                                        去登录
+                                    </v-btn>
+                                </v-stepper-content>
+
                             </v-stepper-items>
                         </v-stepper>
                     </v-card>
@@ -80,16 +167,20 @@
                 this.accessInfo = data;
             })
         },
-        data: function () {
+        data() {
             return {
                 loginStep: 1,
                 account: "",
                 password: "",
+                rePassword: "",
                 loading_show: false,
                 pw_show: false,
+                cardTitle: "登陆",
+                cardType:"login",
                 rules: {
                     required: value => !!value || 'Required.',
                     min: v => v.length >= 6 || 'Min 6 characters',
+                    rePassword: v => v === this.password || '两次密码输入不一致'
                 },
                 accessInfo: {
                     browser:{
@@ -109,7 +200,15 @@
             };
         },
         methods: {
-            goLogin: function () {
+            goLogin() {
+                this.cardType = 'login';
+
+            },
+            goRegister(){
+                this.cardType = 'register';
+
+            },
+            doLogin(){
                 this.showLoading();
 
                 if (!localStorage.getItem('deviceId')){
@@ -148,9 +247,36 @@
                 }).catch(() => {
                     this.hideLoading();
                 })
+            },
+            doRegister(){
+                api.login.signUp({
+                    account:this.account,
+                    password: this.password
+                })
+                .then((resp) => {
+                    if (resp.data.state === 'success'){
+                        this.loginStep = '13';
+                    }
+                })
+                .catch(err => {
+                    this.$dialog.notify.warning(err.response.data.msg, {
+                        position: 'top-right',
+                        timeout: 3000
+                    })
+                })
+            },
+            registerCheckAccount(){
+                this.loginStep = '11';
+            },
+            registerCheckPassword(){
+                this.loginStep = '12';
+            },
+            registerCheckRePassword(){
+                if (this.password === this.rePassword)
+                    this.doRegister();
 
             },
-            lookupAccount: function () {
+            loginCheckAccount() {
                 this.loading_show = true;
 
                 api.login.lookup({
@@ -158,17 +284,15 @@
                 }).then((resp) => {
                     if (resp.data.isExist === "true") {
                         this.loginStep = 2;
-                    } else {
-                        this.$dialog.notify.warning(resp.data.msg, {
-                            position: 'top-right',
-                            timeout: 3000
-                        })
                     }
                     this.loading_show = false;
                 }).catch(() => {
+                    this.$dialog.notify.warning("我们未找到您的账户, 请检查您的账户名。", {
+                        position: 'top-right',
+                        timeout: 3000
+                    })
                     this.loading_show = false;
                 })
-
             },
             saveLogin(token) {
                 let decode = jwt_decode(token);
@@ -176,13 +300,25 @@
                 localStorage.setItem("token", token);
                 localStorage.setItem("expireTime", Number.parseInt(decode.exp) * 1000);
             },
-            showLoading: function () {
+            showLoading() {
                 this.loading_show = true;
             },
-            hideLoading: function () {
+            hideLoading() {
                 this.loading_show = false;
             }
         },
+        watch:{
+            cardType(val){
+                if (val === "login"){
+                    this.cardTitle = '登录'
+                    this.loginStep = '1'
+                }else if (val === 'register'){
+                    this.cardTitle = '注册'
+                    this.loginStep = '10'
+                }
+
+            }
+        }
     };
 </script>
 
