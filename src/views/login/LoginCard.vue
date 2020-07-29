@@ -10,7 +10,7 @@
                             <v-btn
                                     v-if="cardType === 'login'"
                                     text
-                                    @click="goRegister"
+                                    @click="goSignUp"
                             >
                                 注册
                             </v-btn>
@@ -44,6 +44,7 @@
                                 </v-stepper-content>
                                 <v-stepper-content step="2">
                                     <v-container>
+                                        <v-form v-model="valids.loginPwdValid" ref="loginPwdForm">
                                         <v-text-field
                                                 v-model="password"
                                                 :append-icon="pw_show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -56,6 +57,7 @@
                                                 placeholder="密码"
                                                 @keyup.13="doLogin"
                                                 counter outlined></v-text-field>
+                                        </v-form>
                                     </v-container>
                                     <v-btn
                                             color="primary"
@@ -72,19 +74,20 @@
                                                       :counter="16"
                                                       label="用户名"
                                                       placeholder="用户名"
-                                                      @keyup.13="registerCheckAccount"
+                                                      @keyup.13="signUpCheckAccount"
                                                       outlined required></v-text-field>
                                     </v-container>
                                     <v-btn
                                             color="primary"
                                             :disabled="account.length === 0"
-                                            @click="registerCheckAccount"
+                                            @click="signUpCheckAccount"
                                     >
                                         下一步
                                     </v-btn>
                                 </v-stepper-content>
                                 <v-stepper-content step="11" >
                                     <v-container>
+                                        <v-form v-model="valids.signUpPwdValid" ref="signUpPwdForm">
                                         <v-text-field
                                                 v-model="password"
                                                 :append-icon="pw_show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -95,19 +98,21 @@
                                                 label="密码"
                                                 hint="至少6个字符"
                                                 placeholder="密码"
-                                                @keyup.13="registerCheckPassword"
+                                                @keyup.13="signUpCheckPassword"
                                                 counter outlined></v-text-field>
+                                        </v-form>
                                     </v-container>
                                     <v-btn
                                             color="primary"
                                             :disabled="account.length === 0"
-                                            @click="registerCheckPassword"
+                                            @click="signUpCheckPassword"
                                     >
                                         下一步
                                     </v-btn>
                                 </v-stepper-content>
                                 <v-stepper-content step="12" >
                                     <v-container>
+                                        <v-form v-model="valids.signUpRePwdValid" ref="signUpRePwdForm">
                                         <v-text-field
                                                 v-model="rePassword"
                                                 type="password"
@@ -116,13 +121,14 @@
                                                 label="重复密码"
                                                 hint="至少6个字符"
                                                 placeholder="重复密码"
-                                                @keyup.13="registerCheckRePassword"
+                                                @keyup.13="signUpCheckRePassword"
                                                 counter outlined></v-text-field>
+                                        </v-form>
                                     </v-container>
                                     <v-btn
                                             color="primary"
                                             :disabled="account.length === 0"
-                                            @click="registerCheckRePassword"
+                                            @click="signUpCheckRePassword"
                                     >
                                         下一步
                                     </v-btn>
@@ -176,14 +182,19 @@
                 loading_show: false,
                 pw_show: false,
                 cardTitle: "登陆",
-                cardType:"login",
+                cardType: "login",
                 rules: {
                     required: value => !!value || 'Required.',
                     min: v => v.length >= 6 || 'Min 6 characters',
                     rePassword: v => v === this.password || '两次密码输入不一致'
                 },
+                valids: {
+                    signUpPwdValid: true,
+                    signUpRePwdValid: true,
+                    loginPwdValid: true
+                },
                 accessInfo: {
-                    browser:{
+                    browser: {
                         name: "",
                         type: "",
                         version: "",
@@ -204,11 +215,14 @@
                 this.cardType = 'login';
 
             },
-            goRegister(){
+            goSignUp(){
                 this.cardType = 'register';
 
             },
             doLogin(){
+                if(!this.$refs.loginPwdForm.validate())
+                    return;
+
                 this.showLoading();
 
                 if (!localStorage.getItem('deviceId')){
@@ -248,7 +262,7 @@
                     this.hideLoading();
                 })
             },
-            doRegister(){
+            doSignUp(){
                 api.login.signUp({
                     account:this.account,
                     password: this.password
@@ -265,16 +279,35 @@
                     })
                 })
             },
-            registerCheckAccount(){
-                this.loginStep = '11';
+            signUpCheckAccount(){
+                api.login.lookup({
+                    username: this.account
+                }).then((resp) => {
+                    if (resp.data.isExist === "true") {
+                        this.$dialog.notify.warning("该账户已被占用, 用别的试试吧。", {
+                            position: 'top-right',
+                            timeout: 3000
+                        })
+                    }
+                }).catch(() => {
+                    this.loginStep = '11';
+                })
+
+
             },
-            registerCheckPassword(){
+            signUpCheckPassword(){
+                //验证表单
+                if(!this.$refs.signUpPwdForm.validate())
+                    return;
+
                 this.loginStep = '12';
             },
-            registerCheckRePassword(){
-                if (this.password === this.rePassword)
-                    this.doRegister();
+            signUpCheckRePassword(){
 
+                if (!this.$refs.signUpRePwdForm.validate())
+                    return;
+
+                this.doSignUp();
             },
             loginCheckAccount() {
                 this.loading_show = true;
