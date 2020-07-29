@@ -14,7 +14,7 @@
 </template>
 
 <script>
-    import {deviceId} from './components/utils/access-info'
+    import {deviceId} from './components/utils/access-utils'
     export default {
         name: 'App',
         components: {},

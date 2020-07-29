@@ -163,8 +163,7 @@
 
 <script>
     import api from '../../api/index'
-    import {info} from "../../components/utils/access-info";
-    const jwt_decode = require('jwt-decode');
+    import {info,saveLogin} from "../../components/utils/access-utils";
 
     export default {
         name: "LoginCard",
@@ -248,7 +247,7 @@
                     locationCity: this.accessInfo.location.city,
                 }).then(resp => {
                     if (resp.data.state === "success") {
-                        this.saveLogin(resp.headers['x-auth-token']);
+                        saveLogin(resp.headers['x-auth-token']);
                         this.hideLoading();
                         this.$router.replace("/profile/main")
                     } else {
@@ -326,12 +325,6 @@
                     })
                     this.loading_show = false;
                 })
-            },
-            saveLogin(token) {
-                let decode = jwt_decode(token);
-
-                localStorage.setItem("token", token);
-                localStorage.setItem("expireTime", Number.parseInt(decode.exp) * 1000);
             },
             showLoading() {
                 this.loading_show = true;

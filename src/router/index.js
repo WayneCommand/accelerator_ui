@@ -10,6 +10,8 @@ import MyInfo from "../views/profiles/components/MyInfo";
 import Safety from "../views/profiles/components/Safety";
 import Main from "../views/profiles/components/Main";
 
+import {getTokenInfo} from '../components/utils/access-utils';
+
 
 Vue.use(VueRouter);
 
@@ -67,8 +69,9 @@ router.beforeEach((to, from, next) => {
         next()
     }
 
-    let token = localStorage.getItem("token");
-    let expireTime = Number.parseInt(localStorage.getItem("expireTime"));
+    let tokenInfo = getTokenInfo();
+    let token = tokenInfo.token;
+    let expireTime = tokenInfo.expireTime;
 
     //检查localstorage里有没有token
     //如果有token则判断是否已过期

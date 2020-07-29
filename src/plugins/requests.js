@@ -2,7 +2,7 @@ import axios from 'axios'
 import Vue from 'vue'
 import api from "../api";
 
-const jwt_decode = require('jwt-decode');
+import {saveLogin,getTokenInfo} from '../components/utils/access-utils';
 
 // 统一配置
 let REQUEST = axios.create({
@@ -18,8 +18,10 @@ let requestRefreshToken = false;
 
 // 拦截请求
 REQUEST.interceptors.request.use((config) => {
-    let token = localStorage.getItem("token");
-    let expireTime = Number.parseInt(localStorage.getItem("expireTime"));
+
+    let tokenInfo = getTokenInfo();
+    let token = tokenInfo.token;
+    let expireTime = tokenInfo.expireTime;
 
     //如果token是过期的 路由会拦截掉并跳转登录
     if (token){
@@ -107,13 +109,6 @@ REQUEST.interceptors.response.use((config) => {
     }
     return Promise.reject(error)
 });
-
-function saveLogin(token) {
-    let decode = jwt_decode(token);
-
-    localStorage.setItem("token", token);
-    localStorage.setItem("expireTime", Number.parseInt(decode.exp) * 1000);
-}
 
 const request = {
     post(url, params) {

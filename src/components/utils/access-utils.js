@@ -3,6 +3,7 @@ import Fingerprint2 from "fingerprintjs2";
 const { detect } = require('detect-browser');
 const publicIp = require('public-ip');
 const ipLocation = require("iplocation");
+const jwt_decode = require('jwt-decode');
 
 export const info = async () => {
     let browser = detect();
@@ -32,4 +33,20 @@ export const deviceId = async () => {
         let values = components.map(component => component.value)
         return Fingerprint2.x64hash128(values.join(''), 31)
     });
+}
+
+export const saveLogin = token => {
+    let decode = jwt_decode(token);
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("expireTime", Number.parseInt(decode.exp) * 1000);
+}
+
+export const getTokenInfo = () => {
+    let token = localStorage.getItem("token");
+    let expireTime = Number.parseInt(localStorage.getItem("expireTime"));
+    return {
+        token,
+        expireTime
+    }
 }
