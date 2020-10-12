@@ -8,7 +8,6 @@ export default {
     },
     mutations: {
         setUser (state, val) {
-            console.log(val);
             state.user = val
         },
         setPermissions (state, val) {

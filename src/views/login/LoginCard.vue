@@ -44,20 +44,22 @@
                                 </v-stepper-content>
                                 <v-stepper-content step="2">
                                     <v-container>
-                                        <v-form v-model="valids.loginPwdValid" ref="loginPwdForm">
-                                        <v-text-field
-                                                v-model="password"
-                                                :append-icon="pw_show ? 'mdi-eye' : 'mdi-eye-off'"
-                                                :type="pw_show ? 'text' : 'password'"
-                                                @click:append="pw_show = !pw_show"
-                                                :rules="[rules.required, rules.min]"
-                                                name="password"
-                                                label="密码"
-                                                hint="至少6个字符"
-                                                placeholder="密码"
-                                                @keyup.13="doLogin"
-                                                counter outlined></v-text-field>
+                                        <v-form v-model="valids.loginPwdValid" ref="loginPwdForm" @submit="doLogin" >
+                                            <v-text-field
+                                                    v-model="password"
+                                                    :append-icon="pw_show ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :type="pw_show ? 'text' : 'password'"
+                                                    @click:append="pw_show = !pw_show"
+                                                    :rules="[rules.required, rules.min]"
+                                                    name="password"
+                                                    label="密码"
+                                                    hint="至少6个字符"
+                                                    placeholder="密码"
+                                                    @keyup.13="doLogin"
+                                                    counter outlined></v-text-field>
                                         </v-form>
+
+
                                     </v-container>
                                     <v-btn
                                             color="primary"
@@ -249,7 +251,7 @@
                     if (resp.data.state === "success") {
                         saveLogin(resp.headers['x-auth-token']);
                         this.hideLoading();
-                        this.$router.replace("/profile/main")
+                        this.$router.replace(this.$route.query.redirect || "/profile/main");
                     } else {
                         this.$dialog.notify.warning(resp.data.msg, {
                             position: 'top-right',

@@ -26,7 +26,7 @@
                                                   placeholder="原密码"
                                                   :rules="[rules.min]"
                                                   :error-messages="originPwdErrMsg"
-                                                  :append-icon="pw_show ? 'visibility' : 'visibility_off'"
+                                                  :append-icon="pw_show ? 'mdi-eye' : 'mdi-eye-off'"
                                                   :type="pw_show ? 'text' : 'password'"
                                                   @click:append="pw_show = !pw_show"
                                                   outlined required></v-text-field>
@@ -46,7 +46,7 @@
                                                   label="新密码"
                                                   placeholder="新密码"
                                                   :rules="[rules.min]"
-                                                  :append-icon="pw_show ? 'visibility' : 'visibility_off'"
+                                                  :append-icon="pw_show ? 'mdi-eye' : 'mdi-eye-off'"
                                                   :type="pw_show ? 'text' : 'password'"
                                                   @click:append="pw_show = !pw_show"
                                                   outlined required></v-text-field>
