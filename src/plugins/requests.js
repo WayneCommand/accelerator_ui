@@ -6,7 +6,6 @@ import {saveLogin,getTokenInfo} from '../components/utils/access-utils';
 
 // 统一配置
 let REQUEST = axios.create({
-    baseURL: 'http://127.0.0.1:9090/',
     responseType: 'json',
     validateStatus(status) {
         // 200 外的状态码都认定为失败

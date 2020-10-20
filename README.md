@@ -10,6 +10,7 @@
 - vuex
 - vue router
 - axios
+- mockjs
 - yarn
 
 ## Project setup

@@ -79,9 +79,19 @@ router.beforeEach((to, from, next) => {
     if (token && new Date().getTime() < expireTime){
         next()
     }else{
-        next("/login");
+        console.log(from.path);
+        if (to.path === "/login") {
+            next();
+        } else {
+            if (to.fullPath === "/profile/myinfo") //避免 / 的 redirect 的 url
+                next("/login");
+            else
+                next({
+                    path: "/login",
+                    query: {redirect: to.fullPath} //把源url放到query里
+                });
+        }
     }
-
 })
 
 export default router

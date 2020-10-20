@@ -8,6 +8,11 @@ import 'vuetify-dialog/dist/vuetify-dialog.css'
 
 Vue.config.productionTip = false;
 
+// only dev ENV
+if (process.env.NODE_ENV === 'development'){
+  require('./mock')
+}
+
 Vue.use(VuetifyDialog, {
   context: {
     vuetify
