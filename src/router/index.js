@@ -9,6 +9,7 @@ import Profile from "../views/profiles/Profile";
 import MyInfo from "../views/profiles/components/MyInfo";
 import Safety from "../views/profiles/components/Safety";
 import Main from "../views/profiles/components/Main";
+import Policies from "../views/policies/Policies";
 
 import {getTokenInfo} from '../components/utils/access-utils';
 
@@ -52,6 +53,15 @@ let constRouter = [
 
             }
         ]
+    },
+    {
+        path: '/policies',
+        name: '隐私政策',
+        components: {
+            navigation: Menu,
+            header: Header,
+            default: Policies
+        }
     }
 ];
 

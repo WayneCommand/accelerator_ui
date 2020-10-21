@@ -1,0 +1,16 @@
+// @/sass/variables.scss
+// https://github.com/vuetifyjs/vuetify/issues/8169#issuecomment-590010076
+
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+SC:100,300,400,500,700,900');
+
+$body-font-family: 'Noto Sans SC';
+
+$typoOptions: display-4, display-3, display-2, display-1, headline, title, subtitle-1, subtitle-2, body-1, body-2, caption, overline;
+#app {
+  font-family: $body-font-family, sans-serif !important;
+  @each $typoOption in $typoOptions {
+    .#{$typoOption} {
+      font-family: $body-font-family, sans-serif !important;
+    }
+  }
+}

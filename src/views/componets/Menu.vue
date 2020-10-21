@@ -27,6 +27,12 @@
                 </v-list-item-icon>
                 <v-list-item-title>安全性</v-list-item-title>
             </v-list-item>
+          <v-list-item link to="/policies">
+            <v-list-item-icon>
+              <v-icon>mdi-shield-account-variant</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>隐私政策</v-list-item-title>
+          </v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
