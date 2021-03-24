@@ -1,4 +1,4 @@
-import Fingerprint2 from "fingerprintjs2";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 const { detect } = require('detect-browser');
 const publicIp = require('public-ip');
@@ -28,12 +28,15 @@ export const info = async () => {
     };
 }
 
-export const deviceId = async () => {
-    return await Fingerprint2.getPromise({}).then(components => {
-        let values = components.map(component => component.value)
-        return Fingerprint2.x64hash128(values.join(''), 31)
-    });
-}
+export const deviceId = (async () => {
+    const fp = await FingerprintJS.load();
+
+    // The FingerprintJS agent is ready.
+    const result = await fp.get();
+
+    // This is the visitor identifier:
+    return result.visitorId;
+});
 
 export const saveLogin = token => {
     let decode = jwt_decode(token);
