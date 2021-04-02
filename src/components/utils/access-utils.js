@@ -1,9 +1,9 @@
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import jwt_decode from 'jwt-decode';
 
 const { detect } = require('detect-browser');
 const publicIp = require('public-ip');
 const ipLocation = require("iplocation");
-const jwt_decode = require('jwt-decode');
 
 export const info = async () => {
     let browser = detect();
@@ -28,7 +28,7 @@ export const info = async () => {
     };
 }
 
-export const deviceId = (async () => {
+export const deviceId = async () => {
     const fp = await FingerprintJS.load();
 
     // The FingerprintJS agent is ready.
@@ -36,7 +36,7 @@ export const deviceId = (async () => {
 
     // This is the visitor identifier:
     return result.visitorId;
-});
+}
 
 export const saveLogin = token => {
     let decode = jwt_decode(token);
