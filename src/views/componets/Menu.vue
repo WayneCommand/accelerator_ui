@@ -4,6 +4,8 @@
             app
             expand-on-hover
             v-model="drawer"
+            color="rgba(255, 255, 255, 0.7)"
+            class="backdrop"
     >
         <v-list
                 nav

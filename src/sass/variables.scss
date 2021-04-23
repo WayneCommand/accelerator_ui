@@ -14,3 +14,8 @@ $typoOptions: display-4, display-3, display-2, display-1, headline, title, subti
     }
   }
 }
+
+.backdrop {
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
