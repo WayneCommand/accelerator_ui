@@ -12,7 +12,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "detect-browser": "^5.2.0",
-    "@fingerprintjs/fingerprintjs": "^3.0.6",
+    "@fingerprintjs/fingerprintjs": "^3.1.0",
     "iplocation": "^7.2.0",
     "jwt-decode": "^3.1.2",
     "mockjs": "^1.1.0",
