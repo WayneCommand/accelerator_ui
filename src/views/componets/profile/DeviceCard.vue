@@ -2,7 +2,7 @@
     <v-card class="ma-2" max-width="450px">
         <v-list-item>
             <v-list-item-avatar>
-                <v-icon>{{deviceModelConst[deviceModel] || "mdi-spin mdi-orbit"}}</v-icon>
+                <v-icon>{{ DEVICE_MODEL[deviceModel] || "mdi-spin mdi-orbit"}}</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
                 <v-list-item-title class="headline">设备名: {{deviceName}}</v-list-item-title>
@@ -36,36 +36,38 @@
 </template>
 
 <script>
+const DEVICE_MODEL = {
+  "windows":"mdi-laptop-windows",
+  "macbook":"mdi-laptop-mac",
+  "ios":"mdi-cellphone-iphone",
+  "android":"mdi-cellphone-android",
+  "firefox":"mdi-firefox",
+  "chrome":"mdi-google-chrome",
+  "edge-chromium":"mdi-microsoft-edge",
+  "edge":"mdi-microsoft-edge-legacy",
+  "safari":"mdi-apple-safari",
+}
 
-    export default {
-        name: "DeviceCard",
-        props: {
-            deviceId: String,
-            deviceName: String,
-            deviceType: String,
-            deviceModel: String,
-            deviceSystem: String,
-            deviceVersion: String,
-            ip: String,
-            location: String,
-            del: Function,
-            edit: Function
-        },
-        data:function () {
-            return{
-                deviceModelConst:{
-                    "windows":"mdi-laptop-windows",
-                    "macbook":"mdi-laptop-mac",
-                    "ios":"mdi-cellphone-iphone",
-                    "android":"mdi-cellphone-android",
-                    "firefox":"mdi-firefox",
-                    "chrome":"mdi-google-chrome",
-                    "edge-chromium":"mdi-microsoft-edge",
-                    "edge":"mdi-microsoft-edge-legacy",
-                }
-            }
+export default {
+    name: "DeviceCard",
+    props: {
+        deviceId: String,
+        deviceName: String,
+        deviceType: String,
+        deviceModel: String,
+        deviceSystem: String,
+        deviceVersion: String,
+        ip: String,
+        location: String,
+        del: Function,
+        edit: Function
+    },
+    data () {
+        return{
+          DEVICE_MODEL
         }
     }
+}
 </script>
 
 <style scoped>

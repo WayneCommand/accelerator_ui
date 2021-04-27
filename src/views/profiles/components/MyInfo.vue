@@ -102,10 +102,10 @@
 </template>
 
 <script>
-    import api from "../../../api";
+    import api from "@/api";
     import {mapState,mapMutations} from 'vuex'
-    import InfoEditDialog from "./dialogs/Info-Edit-Dialog";
-    import PasswordEditDialog from "./dialogs/Password-Edit-Dialog";
+    import InfoEditDialog from "./dialogs/InfoEditDialog";
+    import PasswordEditDialog from "./dialogs/PasswordEditDialog";
 
     export default {
         name: "MyInfo",

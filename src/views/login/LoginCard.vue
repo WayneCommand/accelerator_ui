@@ -164,8 +164,8 @@
 </template>
 
 <script>
-    import api from '../../api/index'
-    import {info,saveLogin} from "../../components/utils/access-utils";
+    import api from '@/api/index'
+    import {info,saveLogin} from "@/components/utils/access-utils";
 
     export default {
         name: "LoginCard",

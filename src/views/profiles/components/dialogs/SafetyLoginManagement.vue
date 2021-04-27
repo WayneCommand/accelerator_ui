@@ -39,7 +39,7 @@
 
 
     export default {
-        name: "Safety-Login-Management",
+        name: "safety-login-management",
         data:function () {
             return {
                 phoneToLoginVal:false,

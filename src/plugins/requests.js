@@ -2,7 +2,7 @@ import axios from 'axios'
 import Vue from 'vue'
 import api from "../api";
 
-import {saveLogin,getTokenInfo} from '../components/utils/access-utils';
+import {saveLogin,getTokenInfo} from '@/components/utils/access-utils';
 
 // 统一配置
 let REQUEST = axios.create({

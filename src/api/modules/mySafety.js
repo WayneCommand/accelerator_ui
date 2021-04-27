@@ -1,4 +1,4 @@
-import req from '../../plugins/requests';
+import req from '@/plugins/requests';
 
 export default {
     mySafety(obj){

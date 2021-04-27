@@ -100,10 +100,10 @@
 
 <script>
     import {mapMutations,mapState} from 'vuex'
-    import api from "../../../../api";
+    import api from "@/api";
 
     export default {
-        name: "Password-Edit-Dialog",
+        name: "password-edit-dialog",
         data:function () {
             return{
                 pw_show: false,

@@ -1,17 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Menu from "../views/componets/Menu";
-import Header from "../views/componets/Header";
-import LoginCard from "../views/login/LoginCard";
-import LoginHeader from "../views/login/LoginHeader";
-import Profile from "../views/profiles/Profile";
-import MyInfo from "../views/profiles/components/MyInfo";
-import Safety from "../views/profiles/components/Safety";
-import Main from "../views/profiles/components/Main";
-import Policies from "../views/policies/Policies";
+import Menu from "@/views/componets/Menu";
+import Header from "@/views/componets/Header";
+import LoginCard from "@/views/login/LoginCard";
+import LoginHeader from "@/views/login/LoginHeader";
+import Profile from "@/views/profiles/Profile";
+import MyInfo from "@/views/profiles/components/MyInfo";
+import Safety from "@/views/profiles/components/Safety";
+import Main from "@/views/profiles/components/Main";
+import Policies from "@/views/policies/Policies";
 
-import {getTokenInfo} from '../components/utils/access-utils';
+import {getTokenInfo} from '@/components/utils/access-utils';
 
 
 Vue.use(VueRouter);

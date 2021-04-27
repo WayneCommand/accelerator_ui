@@ -50,10 +50,10 @@
 
 <script>
     import {mapMutations,mapState} from 'vuex';
-    import api from "../../../../api";
+    import api from "@/api";
 
     export default {
-        name: "InfoEditDialog",
+        name: "info-edit-dialog",
         data () {
             return {
                 nickname: "",

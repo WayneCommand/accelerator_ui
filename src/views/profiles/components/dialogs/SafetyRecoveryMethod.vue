@@ -134,10 +134,10 @@
 
 <script>
     import {mapMutations,mapState} from 'vuex'
-    import api from "../../../../api";
+    import api from "@/api";
 
     export default {
-        name: "Safety-Recovery-Method",
+        name: "safety-recovery-method",
         data: function () {
             return{
                 rPhoneStep: 1,

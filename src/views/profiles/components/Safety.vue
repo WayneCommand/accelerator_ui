@@ -133,13 +133,13 @@
 </template>
 
 <script>
-    import Device from "../../componets/profile/Device";
-    import api from "../../../api";
-    import PasswordEditDialog from "./dialogs/Password-Edit-Dialog";
+    import Device from "@/views/componets/profile/Device";
+    import api from "@/api";
+    import PasswordEditDialog from "./dialogs/PasswordEditDialog";
     import {mapState,mapMutations} from 'vuex'
-    import SafetyLoginManagement from "./dialogs/Safety-Login-Management";
-    import SafetyRecoveryMethod from "./dialogs/Safety-Recovery-Method";
-    import SafetyDevicesManagement from "./dialogs/Safety-Devices-Management";
+    import SafetyLoginManagement from "./dialogs/SafetyLoginManagement";
+    import SafetyRecoveryMethod from "./dialogs/SafetyRecoveryMethod";
+    import SafetyDevicesManagement from "./dialogs/SafetyDevicesManagement";
 
     export default {
         name: "Safety",

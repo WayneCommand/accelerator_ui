@@ -65,11 +65,11 @@
 
 <script>
     import {mapMutations,mapState} from 'vuex'
-    import DeviceCard from "../../../componets/profile/DeviceCard";
-    import api from "../../../../api";
+    import DeviceCard from "@/views/componets/profile/DeviceCard";
+    import api from "@/api";
 
     export default {
-        name: "Safety-Devices-Management",
+        name: "safety-devices-management",
         components: {DeviceCard},
         created() {
         },
