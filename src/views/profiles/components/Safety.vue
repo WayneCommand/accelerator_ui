@@ -133,101 +133,101 @@
 </template>
 
 <script>
-    import Device from "@/views/componets/profile/Device";
-    import api from "@/api";
-    import PasswordEditDialog from "./dialogs/PasswordEditDialog";
-    import {mapState,mapMutations} from 'vuex'
-    import SafetyLoginManagement from "./dialogs/SafetyLoginManagement";
-    import SafetyRecoveryMethod from "./dialogs/SafetyRecoveryMethod";
-    import SafetyDevicesManagement from "./dialogs/SafetyDevicesManagement";
+import Device from "@/views/componets/profile/Device";
+import api from "@/api";
+import PasswordEditDialog from "./dialogs/PasswordEditDialog";
+import {mapState,mapMutations} from 'vuex'
+import SafetyLoginManagement from "./dialogs/SafetyLoginManagement";
+import SafetyRecoveryMethod from "./dialogs/SafetyRecoveryMethod";
+import SafetyDevicesManagement from "./dialogs/SafetyDevicesManagement";
 
-    export default {
-        name: "Safety",
-        components: {
-            SafetyDevicesManagement,
-            SafetyRecoveryMethod,
-            SafetyLoginManagement,
-            PasswordEditDialog,
-            Device
-        },
-        created() {
-            this.loadData();
-        },
-        data:function () {
-            return {
-                passwordModifyTime: "",
-                phoneToLogin:0,
-                twoStepVerify:0,
-                recoveryPhone:"",
-                recoveryEmail:"",
-                deviceTokenList: [],
-                switchTextConst: {
-                    0: "关闭",
-                    1: "已开启"
-                },
-                switchIconConst: {
-                    0: "mdi-do-not-disturb",
-                    1: "mdi-check-circle"
-                },
-            };
-        },
-        methods:{
-            ...mapMutations({
-                setPasswordEditorDialog: 'account/setPasswordEditorDialog',
-                setLoginManagementDialog: 'safety/setSafetyLoginManagementEditorDialog',
-                setSafetyEditorType: 'safety/setSafetyEditorType',
-                setRecoverMethodEditorDialog: 'safety/setSafetyRecoverMethodEditorDialog',
-                setSafetyDevicesEditorDialog: 'safety/setSafetyDevicesEditorDialog'
-            }),
-            loadData(){
-                api.mySafety.mySafety()
-                    .then(resp => {
-                        if (resp.data.state === "success") {
-                            this.handleData(resp.data.safety);
-                        } else {
-                            this.$dialog.notify.warning(resp.data.msg, {
-                                position: 'top-right',
-                                timeout: 3000
-                            })
-                        }
-                    });
+export default {
+    name: "Safety",
+    components: {
+        SafetyDevicesManagement,
+        SafetyRecoveryMethod,
+        SafetyLoginManagement,
+        PasswordEditDialog,
+        Device
+    },
+    created () {
+        this.loadData();
+    },
+    data () {
+        return {
+            passwordModifyTime: "",
+            phoneToLogin:0,
+            twoStepVerify:0,
+            recoveryPhone:"",
+            recoveryEmail:"",
+            deviceTokenList: [],
+            switchTextConst: {
+                0: "关闭",
+                1: "已开启"
             },
-            handleData(data) {
-                this.passwordModifyTime = data.userAccount.passwordModifyTime;
-                this.phoneToLogin = data.userAccount.phoneToLogin;
-                this.twoStepVerify = data.userAccount.twoStepVerify;
-                this.recoveryPhone = data.userAccount.recoveryPhone;
-                this.recoveryEmail = data.userAccount.recoveryEmail;
-                this.deviceTokenList = data.deviceTokenList;
+            switchIconConst: {
+                0: "mdi-do-not-disturb",
+                1: "mdi-check-circle"
             },
-            openPasswordEditor(){
-                this.setPasswordEditorDialog(true);
-            },
-            openLoginManagementEditor(){
-                this.setSafetyEditorType('phoneToLogin');
-                this.setLoginManagementDialog(true);
-            },
-            openRecoveryMethodEditor(module){
-                this.setSafetyEditorType(module);
-                this.setRecoverMethodEditorDialog(true);
-            },
-            openDevicesManagementEditor(){
-                this.setSafetyDevicesEditorDialog(true);
-            }
+        };
+    },
+    methods:{
+        ...mapMutations({
+            setPasswordEditorDialog: 'account/setPasswordEditorDialog',
+            setLoginManagementDialog: 'safety/setSafetyLoginManagementEditorDialog',
+            setSafetyEditorType: 'safety/setSafetyEditorType',
+            setRecoverMethodEditorDialog: 'safety/setSafetyRecoverMethodEditorDialog',
+            setSafetyDevicesEditorDialog: 'safety/setSafetyDevicesEditorDialog'
+        }),
+        loadData () {
+            api.mySafety.mySafety()
+                .then(resp => {
+                    if (resp.data.state === "success") {
+                        this.handleData(resp.data.safety);
+                    } else {
+                        this.$dialog.notify.warning(resp.data.msg, {
+                            position: 'top-right',
+                            timeout: 3000
+                        })
+                    }
+                });
         },
-        computed:{
-            ...mapState({
-                deviceEditorDialog: state => state.safety.safetyDevicesEditorDialog
-            })
+        handleData (data) {
+            this.passwordModifyTime = data.userAccount.passwordModifyTime;
+            this.phoneToLogin = data.userAccount.phoneToLogin;
+            this.twoStepVerify = data.userAccount.twoStepVerify;
+            this.recoveryPhone = data.userAccount.recoveryPhone;
+            this.recoveryEmail = data.userAccount.recoveryEmail;
+            this.deviceTokenList = data.deviceTokenList;
         },
-        watch:{
-            deviceEditorDialog(val){
-                if (!val){
-                    this.loadData();
-                }
+        openPasswordEditor () {
+            this.setPasswordEditorDialog(true);
+        },
+        openLoginManagementEditor () {
+            this.setSafetyEditorType('phoneToLogin');
+            this.setLoginManagementDialog(true);
+        },
+        openRecoveryMethodEditor (module) {
+            this.setSafetyEditorType(module);
+            this.setRecoverMethodEditorDialog(true);
+        },
+        openDevicesManagementEditor () {
+            this.setSafetyDevicesEditorDialog(true);
+        }
+    },
+    computed:{
+        ...mapState({
+            deviceEditorDialog: state => state.safety.safetyDevicesEditorDialog
+        })
+    },
+    watch:{
+        deviceEditorDialog(val){
+            if (!val){
+                this.loadData();
             }
         }
     }
+}
 </script>
 
 <style scoped>

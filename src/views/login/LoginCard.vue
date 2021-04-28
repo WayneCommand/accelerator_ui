@@ -164,190 +164,190 @@
 </template>
 
 <script>
-    import api from '@/api/index'
-    import {info,saveLogin} from "@/components/utils/access-utils";
+import api from '@/api/index'
+import {info,saveLogin} from "@/components/utils/access-utils";
 
-    export default {
-        name: "LoginCard",
-        created() {
-            info().then(data => {
-                this.accessInfo = data;
+export default {
+    name: "LoginCard",
+    created () {
+        info().then(data => {
+            this.accessInfo = data;
+        })
+    },
+    data () {
+        return {
+            loginStep: 1,
+            account: "",
+            password: "",
+            rePassword: "",
+            loading_show: false,
+            pw_show: false,
+            cardTitle: "登陆",
+            cardType: "login",
+            rules: {
+                required: value => !!value || 'Required.',
+                min: v => v.length >= 6 || 'Min 6 characters',
+                rePassword: v => v === this.password || '两次密码输入不一致'
+            },
+            valids: {
+                signUpPwdValid: true,
+                signUpRePwdValid: true,
+                loginPwdValid: true
+            },
+            accessInfo: {
+                browser: {
+                    name: "",
+                    type: "",
+                    version: "",
+                    system: ""
+                },
+                location: {
+                    country: "",
+                    region: "",
+                    city: ""
+                },
+                ip: "",
+                deviceId: ""
+            }
+        };
+    },
+    methods: {
+        goLogin () {
+            this.cardType = 'login';
+
+        },
+        goSignUp () {
+            this.cardType = 'register';
+
+        },
+        doLogin () {
+            if(!this.$refs.loginPwdForm.validate())
+                return;
+
+            this.showLoading();
+
+            if (!localStorage.getItem('deviceId')){
+                this.$dialog.notify.warning("您的唯一标识未找到，请刷新浏览器 或换一个设备。", {
+                    position: 'top-right',
+                    timeout: 3000
+                })
+                this.hideLoading();
+                return;
+            }
+
+            api.login.loginByPassword({
+                username: this.account,
+                password: this.password,
+                ip: this.accessInfo.ip,
+                deviceId: localStorage.getItem('deviceId'),
+                deviceModel: this.accessInfo.browser.name,
+                deviceType: this.accessInfo.browser.type,
+                deviceSystem: this.accessInfo.browser.system,
+                deviceVersion: this.accessInfo.browser.version,
+                locationCountry: this.accessInfo.location.country,
+                locationRegion: this.accessInfo.location.region,
+                locationCity: this.accessInfo.location.city,
+            }).then(resp => {
+                if (resp.data.state === "success") {
+                    saveLogin(resp.headers['x-auth-token']);
+                    this.hideLoading();
+                    this.$router.replace(this.$route.query.redirect || "/profile/main");
+                } else {
+                    this.$dialog.notify.warning(resp.data.msg, {
+                        position: 'top-right',
+                        timeout: 3000
+                    })
+                    this.hideLoading();
+                }
+            }).catch(() => {
+                this.hideLoading();
             })
         },
-        data() {
-            return {
-                loginStep: 1,
-                account: "",
-                password: "",
-                rePassword: "",
-                loading_show: false,
-                pw_show: false,
-                cardTitle: "登陆",
-                cardType: "login",
-                rules: {
-                    required: value => !!value || 'Required.',
-                    min: v => v.length >= 6 || 'Min 6 characters',
-                    rePassword: v => v === this.password || '两次密码输入不一致'
-                },
-                valids: {
-                    signUpPwdValid: true,
-                    signUpRePwdValid: true,
-                    loginPwdValid: true
-                },
-                accessInfo: {
-                    browser: {
-                        name: "",
-                        type: "",
-                        version: "",
-                        system: ""
-                    },
-                    location: {
-                        country: "",
-                        region: "",
-                        city: ""
-                    },
-                    ip: "",
-                    deviceId: ""
+        doSignUp () {
+            api.login.signUp({
+                account:this.account,
+                password: this.password
+            })
+            .then(resp => {
+                if (resp.data.state === 'success'){
+                    this.loginStep = '13';
                 }
-            };
+            })
+            .catch(err => {
+                this.$dialog.notify.warning(err.response.data.msg, {
+                    position: 'top-right',
+                    timeout: 3000
+                })
+            })
         },
-        methods: {
-            goLogin() {
-                this.cardType = 'login';
-
-            },
-            goSignUp(){
-                this.cardType = 'register';
-
-            },
-            doLogin(){
-                if(!this.$refs.loginPwdForm.validate())
-                    return;
-
-                this.showLoading();
-
-                if (!localStorage.getItem('deviceId')){
-                    this.$dialog.notify.warning("您的唯一标识未找到，请刷新浏览器 或换一个设备。", {
+        signUpCheckAccount () {
+            api.login.lookup({
+                username: this.account
+            }).then((resp) => {
+                if (resp.data.isExist === "true") {
+                    this.$dialog.notify.warning("该账户已被占用, 用别的试试吧。", {
                         position: 'top-right',
                         timeout: 3000
                     })
-                    this.hideLoading();
-                    return;
                 }
-
-                api.login.loginByPassword({
-                    username: this.account,
-                    password: this.password,
-                    ip: this.accessInfo.ip,
-                    deviceId: localStorage.getItem('deviceId'),
-                    deviceModel: this.accessInfo.browser.name,
-                    deviceType: this.accessInfo.browser.type,
-                    deviceSystem: this.accessInfo.browser.system,
-                    deviceVersion: this.accessInfo.browser.version,
-                    locationCountry: this.accessInfo.location.country,
-                    locationRegion: this.accessInfo.location.region,
-                    locationCity: this.accessInfo.location.city,
-                }).then(resp => {
-                    if (resp.data.state === "success") {
-                        saveLogin(resp.headers['x-auth-token']);
-                        this.hideLoading();
-                        this.$router.replace(this.$route.query.redirect || "/profile/main");
-                    } else {
-                        this.$dialog.notify.warning(resp.data.msg, {
-                            position: 'top-right',
-                            timeout: 3000
-                        })
-                        this.hideLoading();
-                    }
-                }).catch(() => {
-                    this.hideLoading();
-                })
-            },
-            doSignUp(){
-                api.login.signUp({
-                    account:this.account,
-                    password: this.password
-                })
-                .then((resp) => {
-                    if (resp.data.state === 'success'){
-                        this.loginStep = '13';
-                    }
-                })
-                .catch(err => {
-                    this.$dialog.notify.warning(err.response.data.msg, {
-                        position: 'top-right',
-                        timeout: 3000
-                    })
-                })
-            },
-            signUpCheckAccount(){
-                api.login.lookup({
-                    username: this.account
-                }).then((resp) => {
-                    if (resp.data.isExist === "true") {
-                        this.$dialog.notify.warning("该账户已被占用, 用别的试试吧。", {
-                            position: 'top-right',
-                            timeout: 3000
-                        })
-                    }
-                }).catch(() => {
-                    this.loginStep = '11';
-                })
+            }).catch(() => {
+                this.loginStep = '11';
+            })
 
 
-            },
-            signUpCheckPassword(){
-                //验证表单
-                if(!this.$refs.signUpPwdForm.validate())
-                    return;
+        },
+        signUpCheckPassword () {
+            //验证表单
+            if(!this.$refs.signUpPwdForm.validate())
+                return;
 
-                this.loginStep = '12';
-            },
-            signUpCheckRePassword(){
+            this.loginStep = '12';
+        },
+        signUpCheckRePassword () {
 
-                if (!this.$refs.signUpRePwdForm.validate())
-                    return;
+            if (!this.$refs.signUpRePwdForm.validate())
+                return;
 
-                this.doSignUp();
-            },
-            loginCheckAccount() {
-                this.loading_show = true;
+            this.doSignUp();
+        },
+        loginCheckAccount () {
+            this.loading_show = true;
 
-                api.login.lookup({
-                    username: this.account
-                }).then((resp) => {
-                    if (resp.data.isExist === "true") {
-                        this.loginStep = 2;
-                    }
-                    this.loading_show = false;
-                }).catch(() => {
-                    this.$dialog.notify.warning("我们未找到您的账户, 请检查您的账户名。", {
-                        position: 'top-right',
-                        timeout: 3000
-                    })
-                    this.loading_show = false;
-                })
-            },
-            showLoading() {
-                this.loading_show = true;
-            },
-            hideLoading() {
+            api.login.lookup({
+                username: this.account
+            }).then((resp) => {
+                if (resp.data.isExist === "true") {
+                    this.loginStep = 2;
+                }
                 this.loading_show = false;
-            }
+            }).catch(() => {
+                this.$dialog.notify.warning("我们未找到您的账户, 请检查您的账户名。", {
+                    position: 'top-right',
+                    timeout: 3000
+                })
+                this.loading_show = false;
+            })
         },
-        watch:{
-            cardType(val){
-                if (val === "login"){
-                    this.cardTitle = '登录'
-                    this.loginStep = '1'
-                }else if (val === 'register'){
-                    this.cardTitle = '注册'
-                    this.loginStep = '10'
-                }
-
-            }
+        showLoading () {
+            this.loading_show = true;
+        },
+        hideLoading () {
+            this.loading_show = false;
         }
-    };
+    },
+    watch:{
+        cardType (val) {
+            if (val === "login"){
+                this.cardTitle = '登录'
+                this.loginStep = '1'
+            }else if (val === 'register'){
+                this.cardTitle = '注册'
+                this.loginStep = '10'
+            }
+
+        }
+    }
+};
 </script>
 
 <style scoped>

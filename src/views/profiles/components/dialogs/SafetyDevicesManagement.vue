@@ -64,104 +64,103 @@
 </template>
 
 <script>
-    import {mapMutations,mapState} from 'vuex'
-    import DeviceCard from "@/views/componets/profile/DeviceCard";
-    import api from "@/api";
+import {mapMutations,mapState} from 'vuex'
+import DeviceCard from "@/views/componets/profile/DeviceCard";
+import api from "@/api";
 
-    export default {
-        name: "safety-devices-management",
-        components: {DeviceCard},
-        created() {
+export default {
+    name: "safety-devices-management",
+    components: {DeviceCard},
+    created() {
+    },
+    data () {
+        return {
+            devices: [],
+            editNameDialog: false,
+            editDeviceId: "",
+            editDeviceName: ""
+        };
+    },
+    methods: {
+        ...mapMutations({
+            setEditorDialog: 'safety/setSafetyDevicesEditorDialog'
+        }),
+        closeEditorDialog () {
+            this.setEditorDialog(false);
         },
-        data: function () {
-            return {
-                devices: [],
-                editNameDialog: false,
-                editDeviceId: "",
-                editDeviceName: ""
-            };
+        closeEditDeviceNameDialog (){
+            this.editNameDialog = false;
+            this.loadDevicesData();
         },
-        methods: {
-            ...mapMutations({
-                setEditorDialog: 'safety/setSafetyDevicesEditorDialog'
-            }),
-            closeEditorDialog() {
-                this.setEditorDialog(false);
-            },
-            closeEditDeviceNameDialog(){
-                this.editNameDialog = false;
-                this.loadDevicesData();
-            },
-            saveDeviceName(){
-                api.mySafety.updateDeviceName({
-                    deviceId: this.editDeviceId,
-                    deviceName: this.editDeviceName
-                })
-                    .then(() => {
-                        this.closeEditDeviceNameDialog();
-                    });
-            },
-            loadDevicesData(){
-                api.mySafety.devices()
-                    .then(resp => {
-                        if (resp.data.state === 'success') {
-                            let _devices = resp.data.devices
-                            _devices.forEach(dev => {
-                                dev.del = dId => {
-                                    this.$dialog.confirm({
-                                        text: '确定要删除这个设备吗？',
-                                        title: '非常危险',
-                                        actions: {
-                                            false: {
-                                                text: '取消',
-                                                handle: () => {
-                                                    return true;
-                                                }
-                                            },
-                                            true: {
-                                                color: 'red',
-                                                text: '确定',
-                                                handle: () => {
-                                                    new Promise(resolve => {
-                                                        api.mySafety.deleteDevice({deviceId:dId})
-                                                            .then(resp => {
-                                                                if (resp.data.state === "success"){
-                                                                    resolve();
-                                                                    this.$dialog.message.success("已完成请求。")
-                                                                }else {
-                                                                    this.$dialog.message.error(resp.data.msg ? resp.data.msg : "未能成功执行该操作。");
-                                                                }
-                                                            })
-                                                    })
-                                                }
+        saveDeviceName () {
+            api.mySafety.updateDeviceName({
+                deviceId: this.editDeviceId,
+                deviceName: this.editDeviceName
+            }).then(() => {
+                    this.closeEditDeviceNameDialog();
+                });
+        },
+        loadDevicesData(){
+            api.mySafety.devices()
+                .then(resp => {
+                    if (resp.data.state === 'success') {
+                        let _devices = resp.data.devices
+                        _devices.forEach(dev => {
+                            dev.del = dId => {
+                                this.$dialog.confirm({
+                                    text: '确定要删除这个设备吗？',
+                                    title: '非常危险',
+                                    actions: {
+                                        false: {
+                                            text: '取消',
+                                            handle: () => {
+                                                return true;
+                                            }
+                                        },
+                                        true: {
+                                            color: 'red',
+                                            text: '确定',
+                                            handle: () => {
+                                                new Promise(resolve => {
+                                                    api.mySafety.deleteDevice({deviceId:dId})
+                                                        .then(resp => {
+                                                            if (resp.data.state === "success"){
+                                                                resolve();
+                                                                this.$dialog.message.success("已完成请求。")
+                                                            }else {
+                                                                this.$dialog.message.error(resp.data.msg ? resp.data.msg : "未能成功执行该操作。");
+                                                            }
+                                                        })
+                                                })
                                             }
                                         }
-                                    })
-                                }
-                                dev.edit = device => {
-                                    this.editDeviceId = device.deviceId;
-                                    this.editDeviceName = device.deviceName;
-                                    this.editNameDialog = true;
-                                }
-                            })
-                            this.devices = _devices;
-                        }
-                    });
-            }
-        },
-        computed: {
-            ...mapState({
-                dialog: state => state.safety.safetyDevicesEditorDialog,
-            }),
-        },
-        watch:{
-            dialog(val){
-                if (val){
-                    this.loadDevicesData();
-                }
+                                    }
+                                })
+                            }
+                            dev.edit = device => {
+                                this.editDeviceId = device.deviceId;
+                                this.editDeviceName = device.deviceName;
+                                this.editNameDialog = true;
+                            }
+                        })
+                        this.devices = _devices;
+                    }
+                });
+        }
+    },
+    computed: {
+        ...mapState({
+            dialog: state => state.safety.safetyDevicesEditorDialog,
+        }),
+    },
+    watch: {
+        dialog (val) {
+            if (val){
+                this.loadDevicesData();
             }
         }
-    };
+    }
+};
 </script>
 
 <style scoped>

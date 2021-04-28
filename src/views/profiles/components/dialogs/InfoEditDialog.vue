@@ -49,73 +49,73 @@
 </template>
 
 <script>
-    import {mapMutations,mapState} from 'vuex';
-    import api from "@/api";
+import {mapMutations,mapState} from 'vuex';
+import api from "@/api";
 
-    export default {
-        name: "info-edit-dialog",
-        data () {
-            return {
-                nickname: "",
-                email:"",
-                phone:""
-            }
-        },
-        methods:{
-            ...mapMutations({
-                setEditorDialog: 'myinfo/setInfoEditorDialog'
-            }),
-            loadData(){
-                api.myInfo.myInfo()
-                .then(resp => {
-                    let profile = resp.data.info.userProfile;
+export default {
+    name: "info-edit-dialog",
+    data () {
+        return {
+            nickname: "",
+            email:"",
+            phone:""
+        }
+    },
+    methods:{
+        ...mapMutations({
+            setEditorDialog: 'myinfo/setInfoEditorDialog'
+        }),
+        loadData(){
+            api.myInfo.myInfo()
+            .then(resp => {
+                let profile = resp.data.info.userProfile;
 
-                    this.nickname = profile.nickname;
-                    this.email = profile.email;
-                    this.phone = profile.phone;
-                })
-            },
-            closeEditorDialog:function () {
-                this.setEditorDialog(false);
-            },
-            updateProfile:function () {
-                let updateEntity = {};
-
-                switch (this.editorType) {
-                    case 'nickname' :
-                        updateEntity.nickname = this.nickname;
-                        break;
-                    case 'email':
-                        updateEntity.email = this.email;
-                        break;
-                    case 'phone':
-                        updateEntity.phone = this.phone;
-                        break;
-                }
-
-                api.myInfo.updateProfile(updateEntity)
-                    .then(resp => {
-                    if (resp.data.state === "success"){
-                        this.closeEditorDialog();
-                        this.$dialog.notify.success("我们已保存刚才的操作.");
-                    }
-                })
-
-            }
-        },
-        computed:{
-            ...mapState({
-                dialog: state => state.myinfo.infoEditorDialog,
-                editorType: state => state.myinfo.infoEditorType,
+                this.nickname = profile.nickname;
+                this.email = profile.email;
+                this.phone = profile.phone;
             })
         },
-        watch:{
-            dialog:function (val) {
-                if (val)
-                    this.loadData();
+        closeEditorDialog () {
+            this.setEditorDialog(false);
+        },
+        updateProfile () {
+            let updateEntity = {};
+
+            switch (this.editorType) {
+                case 'nickname' :
+                    updateEntity.nickname = this.nickname;
+                    break;
+                case 'email':
+                    updateEntity.email = this.email;
+                    break;
+                case 'phone':
+                    updateEntity.phone = this.phone;
+                    break;
             }
+
+            api.myInfo.updateProfile(updateEntity)
+                .then(resp => {
+                if (resp.data.state === "success"){
+                    this.closeEditorDialog();
+                    this.$dialog.notify.success("我们已保存刚才的操作.");
+                }
+            })
+
+        }
+    },
+    computed:{
+        ...mapState({
+            dialog: state => state.myinfo.infoEditorDialog,
+            editorType: state => state.myinfo.infoEditorType,
+        })
+    },
+    watch:{
+        dialog (val) {
+            if (val)
+                this.loadData();
         }
     }
+}
 </script>
 
 <style scoped>

@@ -2,7 +2,7 @@
     <v-flex>
         <v-list-item @click="func">
             <v-list-item-icon>
-                <v-icon>{{deviceModelConst[deviceModel] || "mdi-spin mdi-orbit"}}</v-icon>
+                <v-icon>{{DEVICE_MODEL[deviceModel] || "mdi-spin mdi-orbit"}}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
                 <v-list-item-title>{{deviceName}}</v-list-item-title>
@@ -20,30 +20,33 @@
 </template>
 
 <script>
-    export default {
-        name: "Device",
-        data:function () {
-            return{
-                deviceModelConst:{
-                    "windows":"mdi-laptop-windows",
-                    "macbook":"mdi-laptop-mac",
-                    "ios":"mdi-cellphone-iphone",
-                    "android":"mdi-cellphone-android",
-                    "firefox":"mdi-firefox",
-                    "chrome":"mdi-google-chrome",
-                    "edge-chromium":"mdi-microsoft-edge",
-                    "edge":"mdi-microsoft-edge-legacy",
-                }
-            }
-        },
-        props:{
-            deviceModel:String,
-            deviceName:String,
-            addr:String,
-            currentDevice:Boolean,
-            func:Function
+const DEVICE_MODEL = {
+  "windows":"mdi-laptop-windows",
+  "macbook":"mdi-laptop-mac",
+  "ios":"mdi-cellphone-iphone",
+  "android":"mdi-cellphone-android",
+  "firefox":"mdi-firefox",
+  "chrome":"mdi-google-chrome",
+  "edge-chromium":"mdi-microsoft-edge",
+  "edge":"mdi-microsoft-edge-legacy",
+  "safari":"mdi-apple-safari",
+}
+
+export default {
+    name: "Device",
+    data () {
+        return{
+          DEVICE_MODEL
         }
+    },
+    props:{
+        deviceModel:String,
+        deviceName:String,
+        addr:String,
+        currentDevice:Boolean,
+        func:Function
     }
+}
 </script>
 
 <style scoped>

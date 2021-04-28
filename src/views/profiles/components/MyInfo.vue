@@ -102,82 +102,75 @@
 </template>
 
 <script>
-    import api from "@/api";
-    import {mapState,mapMutations} from 'vuex'
-    import InfoEditDialog from "./dialogs/InfoEditDialog";
-    import PasswordEditDialog from "./dialogs/PasswordEditDialog";
+import api from "@/api";
+import {mapState,mapMutations} from 'vuex'
+import InfoEditDialog from "./dialogs/InfoEditDialog";
+import PasswordEditDialog from "./dialogs/PasswordEditDialog";
 
-    export default {
-        name: "MyInfo",
-        components: {PasswordEditDialog, InfoEditDialog},
-        created() {
-            new Promise(resolve => {
-                this.loadData(resolve)
-                .catch(() => {
-                    resolve();
-                })
-            });
-        },
-        data:function () {
-            return{
-                nickname: "",
-                avatar: "",
-                passwordModifyTime: "",
-                emails: [],
-                phones: []
-            }
-        },
-        methods: {
-            ...mapMutations({
-                setEditorDialog: 'myinfo/setInfoEditorDialog',
-                setEditorType: 'myinfo/setInfoEditorType',
-                setPasswordEditorDialog: 'account/setPasswordEditorDialog'
-            }),
-            loadData:function(resolve){
-                return api.myInfo.myInfo()
-                    .then(resp =>{
-                        if (resp.data.state === "success"){
-                            this.handleData(resp.data.info);
-                        }else {
-                            this.$dialog.notify.warning(resp.data.msg, {
-                                position: 'top-right',
-                                timeout: 3000
-                            })
-                        }
-                        if (resolve)
-                            resolve();
-                    })
-            },
-            handleData: function (data) {
-                this.nickname = data.userProfile.nickname;
-                this.avatar = data.userProfile.avatar;
-                this.emails = data.emails;
-                this.phones = data.phones;
-                this.passwordModifyTime = data.passwordModifyTime;
-            },
-            openEditor:function (module) {
-                this.setEditorType(module);
-                this.setEditorDialog(true);
-            },
-            openPasswordEditor(){
-                this.setPasswordEditorDialog(true);
-            },
-
-        },
-        computed:{
-            ...mapState({
-                infoEditorDialog: state => state.myinfo.infoEditorDialog
-            })
-        },
-        watch:{
-            infoEditorDialog(val) {
-                if (!val)
-                    this.loadData();
-
-            }
+export default {
+    name: "MyInfo",
+    components: {PasswordEditDialog, InfoEditDialog},
+    created () {
+      this.loadData()
+    },
+    data () {
+        return {
+            nickname: "",
+            avatar: "",
+            passwordModifyTime: "",
+            emails: [],
+            phones: []
         }
+    },
+    methods: {
+        ...mapMutations({
+            setEditorDialog: 'myinfo/setInfoEditorDialog',
+            setEditorType: 'myinfo/setInfoEditorType',
+            setPasswordEditorDialog: 'account/setPasswordEditorDialog'
+        }),
+        loadData () {
+            return api.myInfo.myInfo()
+                .then(resp =>{
+                    if (resp.data.state === "success"){
+                        this.handleData(resp.data.info);
+                    }else {
+                        this.$dialog.notify.warning(resp.data.msg, {
+                            position: 'top-right',
+                            timeout: 3000
+                        })
+                    }
+                })
+        },
+        handleData (data) {
+            this.nickname = data.userProfile.nickname;
+            this.avatar = data.userProfile.avatar;
+            this.emails = data.emails;
+            this.phones = data.phones;
+            this.passwordModifyTime = data.passwordModifyTime;
+        },
+        openEditor (module) {
+            this.setEditorType(module);
+            this.setEditorDialog(true);
+        },
+        openPasswordEditor () {
+            this.setPasswordEditorDialog(true);
+        },
 
+    },
+    computed:{
+        ...mapState({
+            infoEditorDialog: state => state.myinfo.infoEditorDialog
+        })
+    },
+    watch:{
+        infoEditorDialog (val) {
+            if (!val)
+                this.loadData();
+
+        }
     }
+
+}
 </script>
 
 <style scoped>

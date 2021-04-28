@@ -31,42 +31,42 @@
 </template>
 
 <script>
-    import api from "@/api";
-    import {mapMutations,mapState} from 'vuex';
+import api from "@/api";
+import {mapMutations,mapState} from 'vuex';
 
-    export default {
-        name: "Main",
-        created() {
-            api.myHomePage.myHomePage()
-                .then(resp => {
-                    if (resp.data.state === "success") {
-                        this.setUser(resp.data.homePage.userProfile);
+export default {
+    name: "Main",
+    created() {
+        api.myHomePage.myHomePage()
+            .then(resp => {
+                if (resp.data.state === "success") {
+                    this.setUser(resp.data.homePage.userProfile);
 
-                    } else {
-                        this.$dialog.notify.warning(resp.data.msg, {
-                            position: 'top-right',
-                            timeout: 3000
-                        })
-                    }
-                });
-        },
-        data: function () {
-            return{
+                } else {
+                    this.$dialog.notify.warning(resp.data.msg, {
+                        position: 'top-right',
+                        timeout: 3000
+                    })
+                }
+            });
+    },
+    data: function () {
+        return{
 
-            }
-        },
-        methods:{
-            ...mapMutations({
-                setUser: 'account/setUser'
-            })
-        },
-        computed:{
-            ...mapState({
-                nickname: state => state.account.user.nickname,
-                avatar: state => state.account.user.avatar,
-            })
         }
+    },
+    methods:{
+        ...mapMutations({
+            setUser: 'account/setUser'
+        })
+    },
+    computed:{
+        ...mapState({
+            nickname: state => state.account.user.nickname,
+            avatar: state => state.account.user.avatar,
+        })
     }
+}
 </script>
 
 <style scoped>

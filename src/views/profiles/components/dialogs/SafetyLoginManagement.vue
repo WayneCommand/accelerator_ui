@@ -35,33 +35,31 @@
 </template>
 
 <script>
-    import {mapMutations,mapState} from 'vuex'
+import {mapMutations,mapState} from 'vuex'
 
-
-    export default {
-        name: "safety-login-management",
-        data:function () {
-            return {
-                phoneToLoginVal:false,
-
-            }
-        },
-        methods:{
-            ...mapMutations({
-                setEditorDialog: 'safety/setSafetyLoginManagementEditorDialog'
-            }),
-            closeEditorDialog:function () {
-                this.setEditorDialog(false);
-            }
-        },
-        computed:{
-            ...mapState({
-                dialog: state => state.safety.safetyLoginManagementEditorDialog,
-                editorType: state => state.safety.safetyEditorType
-            }),
+export default {
+    name: "safety-login-management",
+    data () {
+        return {
+            phoneToLoginVal:false,
 
         }
+    },
+    methods:{
+        ...mapMutations({
+            setEditorDialog: 'safety/setSafetyLoginManagementEditorDialog'
+        }),
+        closeEditorDialog () {
+            this.setEditorDialog(false);
+        }
+    },
+    computed:{
+        ...mapState({
+            dialog: state => state.safety.safetyLoginManagementEditorDialog,
+            editorType: state => state.safety.safetyEditorType
+        }),
     }
+}
 </script>
 
 <style scoped>

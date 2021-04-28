@@ -133,149 +133,149 @@
 </template>
 
 <script>
-    import {mapMutations,mapState} from 'vuex'
-    import api from "@/api";
+import {mapMutations,mapState} from 'vuex'
+import api from "@/api";
 
-    export default {
-        name: "safety-recovery-method",
-        data: function () {
-            return{
-                rPhoneStep: 1,
-                rEmailStep: 1,
-                rPhone:"",
-                rEmail:"",
-                eCodeGroup:1,
-                pCodeGroup:1,
-                emailVerifyList:[],
-                rules:{
-                    required: value => !!value || 'Required.',
-                    email: value => {
-                        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                        return pattern.test(value) || 'Invalid e-mail.'
-                    },
-                    phone: value => {
-                        const pattern = /^\d{11}$/
-                        return pattern.test(value) || 'Invalid phone.'
-                    }
-                }
-            }
-        },
-        methods: {
-            ...mapMutations({
-                setEditorDialog: 'safety/setSafetyRecoverMethodEditorDialog'
-            }),
-            closeEditorDialog: function () {
-                this.setEditorDialog(false);
-            },
-            bindStep: function () {
-                switch (this.editorType) {
-                    case 'recoveryPhone':
-                        this.rPhoneStep = 2;
-                        this.rPhone = "";
-                        break;
-                    case 'recoveryEmail':
-                        this.rEmailStep = 2;
-                        this.rEmail = "";
-                        break;
-                }
-            },
-            verifyPhone: function () {
-                //正常操作是向后台发请求去验证手机 并返回验证码序列
-                //这里因为没有那个能力 所以直接处理为跳过
-                this.$dialog.confirm({
-                    text: "非常抱歉，我们无法开始验证，本次验证将会跳过。",
-                    title: 'CODE [MIKE-01]',
-                    actions: {
-                        false: {
-                            text: '取消',
-                            handle: () => {
-                                this.rPhoneStep = 1;
-                            }
-                        },
-                        true: {
-                            color: 'red',
-                            text: '确定',
-                            handle: () => {
-                                this.updateSafetyRecoveryMethod();
-                            }
-                        }
-                    }
-                })
-            },
-            verifyEmail: function () {
-                api.mySafety.verifyRecoveryEmail({
-                    recoveryEmail: this.rEmail
-                }).then(resp =>{
-                    if (resp.data.state === "success"){
-                        this.emailVerifyList = resp.data.verifyCodes;
-                        this.rEmailStep = 3;
-                    }
-
-                })
-            },
-            updateSafetyRecoveryMethod: function () {
-                switch (this.editorType) {
-                    case 'recoveryPhone': {
-                        api.mySafety.updateRecoveryPhone({
-                            recoveryPhone: this.rPhone
-                        }).then(resp => {
-                            if (resp.data.state === "success") {
-                                this.rPhoneStep = 4;
-                            } else {
-                                this.$dialog.notify.error(resp.data.msg);
-                            }
-                        });
-                        break;
-                    }
-                    case 'recoveryEmail':{
-                        let verifyCode = this.emailVerifyList[this.eCodeGroup - 1];
-
-                        api.mySafety.updateRecoveryEmail({
-                            seq: verifyCode.seq,
-                            code: verifyCode.code,
-                            recoveryEmail: this.rEmail
-                        }).then(resp => {
-                            if (resp.data.state === "success"){
-                                this.rEmailStep = 4;
-                            }else{
-                                this.$dialog.notify.error(resp.data.msg);
-                            }
-                        });
-                        break;
-                    }
-                }
-            },
-            loadData:function () {
-                this.rPhoneStep = 1;
-                this.rEmailStep = 1;
-                this.rPhone = "";
-                this.rEmail = "";
-                this.eCodeGroup = 1;
-                this.pCodeGroup = 1;
-                this.emailVerifyList = [];
-
-                api.mySafety.mySafety()
-                .then(resp => {
-                    this.rPhone = resp.data.safety.userAccount.recoveryPhone;
-                    this.rEmail = resp.data.safety.userAccount.recoveryEmail;
-                })
-            }
-        },
-        computed:{
-            ...mapState({
-                dialog: state => state.safety.safetyRecoverMethodEditorDialog,
-                editorType: state => state.safety.safetyEditorType
-            }),
-
-        },
-        watch:{
-            dialog:function (val) {
-                if (val){
-                    this.loadData();
+export default {
+    name: "safety-recovery-method",
+    data () {
+        return {
+            rPhoneStep: 1,
+            rEmailStep: 1,
+            rPhone: "",
+            rEmail: "",
+            eCodeGroup: 1,
+            pCodeGroup: 1,
+            emailVerifyList: [],
+            rules: {
+                required: value => !!value || 'Required.',
+                email: value => {
+                    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    return pattern.test(value) || 'Invalid e-mail.'
+                },
+                phone: value => {
+                    const pattern = /^\d{11}$/
+                    return pattern.test(value) || 'Invalid phone.'
                 }
             }
         }
+    },
+    methods: {
+        ...mapMutations({
+            setEditorDialog: 'safety/setSafetyRecoverMethodEditorDialog'
+        }),
+        closeEditorDialog () {
+            this.setEditorDialog(false);
+        },
+        bindStep () {
+            switch (this.editorType) {
+                case 'recoveryPhone':
+                    this.rPhoneStep = 2;
+                    this.rPhone = "";
+                    break;
+                case 'recoveryEmail':
+                    this.rEmailStep = 2;
+                    this.rEmail = "";
+                    break;
+            }
+        },
+        verifyPhone () {
+            //正常操作是向后台发请求去验证手机 并返回验证码序列
+            //这里因为没有那个能力 所以直接处理为跳过
+            this.$dialog.confirm({
+                text: "非常抱歉，我们无法开始验证，本次验证将会跳过。",
+                title: 'CODE [MIKE-01]',
+                actions: {
+                    false: {
+                        text: '取消',
+                        handle: () => {
+                            this.rPhoneStep = 1;
+                        }
+                    },
+                    true: {
+                        color: 'red',
+                        text: '确定',
+                        handle: () => {
+                            this.updateSafetyRecoveryMethod();
+                        }
+                    }
+                }
+            })
+        },
+        verifyEmail () {
+            api.mySafety.verifyRecoveryEmail({
+                recoveryEmail: this.rEmail
+            }).then(resp =>{
+                if (resp.data.state === "success"){
+                    this.emailVerifyList = resp.data.verifyCodes;
+                    this.rEmailStep = 3;
+                }
+
+            })
+        },
+        updateSafetyRecoveryMethod () {
+            switch (this.editorType) {
+                case 'recoveryPhone': {
+                    api.mySafety.updateRecoveryPhone({
+                        recoveryPhone: this.rPhone
+                    }).then(resp => {
+                        if (resp.data.state === "success") {
+                            this.rPhoneStep = 4;
+                        } else {
+                            this.$dialog.notify.error(resp.data.msg);
+                        }
+                    });
+                    break;
+                }
+                case 'recoveryEmail':{
+                    let verifyCode = this.emailVerifyList[this.eCodeGroup - 1];
+
+                    api.mySafety.updateRecoveryEmail({
+                        seq: verifyCode.seq,
+                        code: verifyCode.code,
+                        recoveryEmail: this.rEmail
+                    }).then(resp => {
+                        if (resp.data.state === "success"){
+                            this.rEmailStep = 4;
+                        }else{
+                            this.$dialog.notify.error(resp.data.msg);
+                        }
+                    });
+                    break;
+                }
+            }
+        },
+        loadData () {
+            this.rPhoneStep = 1;
+            this.rEmailStep = 1;
+            this.rPhone = "";
+            this.rEmail = "";
+            this.eCodeGroup = 1;
+            this.pCodeGroup = 1;
+            this.emailVerifyList = [];
+
+            api.mySafety.mySafety()
+            .then(resp => {
+                this.rPhone = resp.data.safety.userAccount.recoveryPhone;
+                this.rEmail = resp.data.safety.userAccount.recoveryEmail;
+            })
+        }
+    },
+    computed:{
+        ...mapState({
+            dialog: state => state.safety.safetyRecoverMethodEditorDialog,
+            editorType: state => state.safety.safetyEditorType
+        }),
+
+    },
+    watch:{
+        dialog (val) {
+            if (val){
+                this.loadData();
+            }
+        }
     }
+}
 </script>
 
 <style scoped>

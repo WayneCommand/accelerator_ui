@@ -40,31 +40,31 @@
 </template>
 
 <script>
-    import {mapMutations,mapState} from "vuex";
+import {mapMutations,mapState} from "vuex";
 
-    export default {
-        name: "Menu",
-        computed:{
-            drawer:{
-                get(){
-                    return this.menu;
-                },
-                set(value){
-                    this.setMenuDisplay(value);
-                }
+export default {
+    name: "Menu",
+    computed:{
+        drawer:{
+            get(){
+                return this.menu;
             },
-            ...mapState({
-                menu: state => state.layout.menu
-            })
+            set(value){
+                this.setMenuDisplay(value);
+            }
         },
-        methods:{
-            ...mapMutations({
-                setMenuDisplay: 'layout/setMenu'
-            }),
+        ...mapState({
+            menu: state => state.layout.menu
+        })
+    },
+    methods:{
+        ...mapMutations({
+            setMenuDisplay: 'layout/setMenu'
+        }),
 
 
-        }
     }
+}
 </script>
 
 <style scoped>

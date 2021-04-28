@@ -99,91 +99,91 @@
 </template>
 
 <script>
-    import {mapMutations,mapState} from 'vuex'
-    import api from "@/api";
+import {mapMutations,mapState} from 'vuex'
+import api from "@/api";
 
-    export default {
-        name: "password-edit-dialog",
-        data:function () {
-            return{
-                pw_show: false,
-                originPwd:"",
-                newPwd:"",
-                newPwdAg:"",
-                pwdStep: 1,
-                rules:{
-                    min: val => val.length >= 6 || 'Min 6 characters',
-                    pwdAg: val => val === this.newPwd || "两次输入的密码不一致"
-                },
-                originPwdErrMsg: "",
-                loading:false,
-                pwdValid: true,
-                originPwdValid:true
+export default {
+    name: "password-edit-dialog",
+    data () {
+        return{
+            pw_show: false,
+            originPwd:"",
+            newPwd:"",
+            newPwdAg:"",
+            pwdStep: 1,
+            rules:{
+                min: val => val.length >= 6 || 'Min 6 characters',
+                pwdAg: val => val === this.newPwd || "两次输入的密码不一致"
+            },
+            originPwdErrMsg: "",
+            loading:false,
+            pwdValid: true,
+            originPwdValid:true
 
-            }
+        }
+    },
+    methods:{
+        ...mapMutations({
+            setEditorDialog: 'account/setPasswordEditorDialog'
+        }),
+        closeEditorDialog () {
+            this.setEditorDialog(false);
         },
-        methods:{
-            ...mapMutations({
-                setEditorDialog: 'account/setPasswordEditorDialog'
-            }),
-            closeEditorDialog:function () {
-                this.setEditorDialog(false);
-            },
-            changePassword:function () {
-                //验证表单
-                if(!this.$refs.pwdForm.validate())
-                    return
+        changePassword () {
+            //验证表单
+            if(!this.$refs.pwdForm.validate())
+                return
 
-                //提交更新
-                api.mySafety.changePassword({
-                    password:this.newPwd
-                }).then(resp => {
-                    if (resp.data.state === "success")
-                        this.pwdStep = 3;
-                })
-
-            },
-            verifyPassword:function () {
-                this.openLoading();
-
-                api.mySafety.verifyPassword({
-                    password: this.originPwd
-                }).then(resp => {
-                    if (resp.data.state === "success"){
-                        this.pwdStep = 2;
-                    }else{
-                        this.originPwdErrMsg = "原始密码验证错误";
-                    }
-                    this.closeLoading();
-                })
-
-            },
-            openLoading:function () {
-                this.loading = true;
-            },
-            closeLoading:function () {
-                this.loading = false;
-            }
+            //提交更新
+            api.mySafety.changePassword({
+                password:this.newPwd
+            }).then(resp => {
+                if (resp.data.state === "success")
+                    this.pwdStep = 3;
+            })
 
         },
-        computed:{
-            ...mapState({
-                dialog: state => state.account.passwordEditorDialog,
+        verifyPassword () {
+            this.openLoading();
 
-            }),
+            api.mySafety.verifyPassword({
+                password: this.originPwd
+            }).then(resp => {
+                if (resp.data.state === "success"){
+                    this.pwdStep = 2;
+                }else{
+                    this.originPwdErrMsg = "原始密码验证错误";
+                }
+                this.closeLoading();
+            })
 
         },
-        watch:{
-            dialog:function () {
-                //清空数据
-                this.$refs.pwdForm.reset()
-                this.$refs.originPwdForm.reset();
-                //重置到第一页
-                this.pwdStep = 1;
-            }
+        openLoading () {
+            this.loading = true;
+        },
+        closeLoading () {
+            this.loading = false;
         }
 
+    },
+    computed:{
+        ...mapState({
+            dialog: state => state.account.passwordEditorDialog,
+
+        }),
+
+    },
+    watch:{
+        dialog () {
+            //清空数据
+            this.$refs.pwdForm.reset()
+            this.$refs.originPwdForm.reset();
+            //重置到第一页
+            this.pwdStep = 1;
+        }
     }
+
+}
 </script>
 
 <style scoped>
